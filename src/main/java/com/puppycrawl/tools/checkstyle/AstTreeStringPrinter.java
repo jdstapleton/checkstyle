@@ -74,6 +74,7 @@ public final class AstTreeStringPrinter {
     public static String printJavaAndJavadocTree(File file)
             throws IOException, CheckstyleException {
         final DetailAST tree = JavaParser.parseFile(file, JavaParser.Options.WITH_COMMENTS);
+
         return printJavaAndJavadocTree(tree);
     }
 
@@ -85,10 +86,12 @@ public final class AstTreeStringPrinter {
     private static String printJavaAndJavadocTree(DetailAST ast) {
         final StringBuilder messageBuilder = new StringBuilder(1024);
         DetailAST node = ast;
+
         while (node != null) {
             messageBuilder.append(getIndentation(node))
                 .append(getNodeInfo(node))
                 .append(LINE_SEPARATOR);
+
             if (node.getType() == TokenTypes.COMMENT_CONTENT
                     && JavadocUtil.isJavadocComment(node.getParent())) {
                 final String javadocTree = parseAndPrintJavadocTree(node);
@@ -97,8 +100,10 @@ public final class AstTreeStringPrinter {
             else {
                 messageBuilder.append(printJavaAndJavadocTree(node.getFirstChild()));
             }
+
             node = node.getNextSibling();
         }
+
         return messageBuilder.toString();
     }
 
@@ -115,6 +120,7 @@ public final class AstTreeStringPrinter {
         baseIndentation = baseIndentation.substring(0, baseIndentation.length() - 2);
         final String rootPrefix = baseIndentation + "   `--";
         final String prefix = baseIndentation + "       ";
+
         return DetailNodeTreeStringPrinter.printTree(tree, rootPrefix, prefix);
     }
 
@@ -128,6 +134,7 @@ public final class AstTreeStringPrinter {
     public static String printAst(FileText text, JavaParser.Options options)
             throws CheckstyleException {
         final DetailAST ast = JavaParser.parseFileText(text, options);
+
         return printTree(ast);
     }
 
@@ -139,6 +146,7 @@ public final class AstTreeStringPrinter {
     private static String printTree(DetailAST ast) {
         final StringBuilder messageBuilder = new StringBuilder(1024);
         DetailAST node = ast;
+
         while (node != null) {
             messageBuilder.append(getIndentation(node))
                     .append(getNodeInfo(node))
@@ -146,6 +154,7 @@ public final class AstTreeStringPrinter {
                     .append(printTree(node.getFirstChild()));
             node = node.getNextSibling();
         }
+
         return messageBuilder.toString();
     }
 
@@ -170,8 +179,10 @@ public final class AstTreeStringPrinter {
         final boolean isLastChild = ast.getNextSibling() == null;
         DetailAST node = ast;
         final StringBuilder indentation = new StringBuilder(1024);
+
         while (node.getParent() != null) {
             node = node.getParent();
+
             if (node.getParent() == null) {
                 if (isLastChild) {
                     // only ASCII symbols must be used due to
@@ -191,6 +202,7 @@ public final class AstTreeStringPrinter {
                 }
             }
         }
+
         return indentation.toString();
     }
 
@@ -202,6 +214,7 @@ public final class AstTreeStringPrinter {
     private static String escapeAllControlChars(String text) {
         final String textWithoutNewlines = NEWLINE.matcher(text).replaceAll("\\\\n");
         final String textWithoutReturns = RETURN.matcher(textWithoutNewlines).replaceAll("\\\\r");
+
         return TAB.matcher(textWithoutReturns).replaceAll("\\\\t");
     }
 

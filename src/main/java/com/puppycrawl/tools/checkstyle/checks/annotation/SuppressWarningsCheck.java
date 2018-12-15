@@ -156,6 +156,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
 
             final DetailAST token =
                     warningHolder.findFirstToken(TokenTypes.ANNOTATION_MEMBER_VALUE_PAIR);
+
             DetailAST warning;
 
             if (token == null) {
@@ -202,6 +203,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
                                 // but they should not cause exceptions.
                         }
                     }
+
                     warning = warning.getNextSibling();
                 }
             }
@@ -222,6 +224,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
         if (annotation == null) {
             annotation = AnnotationUtil.getAnnotation(ast, FQ_SUPPRESS_WARNINGS);
         }
+
         return annotation;
     }
 
@@ -249,6 +252,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
     private static DetailAST findWarningsHolder(final DetailAST annotation) {
         final DetailAST annValuePair =
             annotation.findFirstToken(TokenTypes.ANNOTATION_MEMBER_VALUE_PAIR);
+
         final DetailAST annArrayInit;
 
         if (annValuePair == null) {
@@ -300,6 +304,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
         else {
             final String warningText =
                     removeQuotes(cond.getText());
+
             logMatch(cond, warningText);
         }
     }
@@ -314,6 +319,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
      */
     private static DetailAST getCondLeft(final DetailAST cond) {
         final DetailAST colon = cond.findFirstToken(TokenTypes.COLON);
+
         return colon.getPreviousSibling();
     }
 
@@ -327,6 +333,7 @@ public class SuppressWarningsCheck extends AbstractCheck {
      */
     private static DetailAST getCondRight(final DetailAST cond) {
         final DetailAST colon = cond.findFirstToken(TokenTypes.COLON);
+
         return colon.getNextSibling();
     }
 

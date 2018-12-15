@@ -67,6 +67,7 @@ public class XpathRegressionRightCurlyTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(RightCurlyCheck.class);
+
         moduleConfig.addAttribute("option", RightCurlyOption.ALONE.toString());
 
         final String[] expectedViolation = {
@@ -90,6 +91,7 @@ public class XpathRegressionRightCurlyTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(RightCurlyCheck.class);
+
         moduleConfig.addAttribute("option", RightCurlyOption.ALONE.toString());
 
         final String[] expectedViolation = {
@@ -113,6 +115,7 @@ public class XpathRegressionRightCurlyTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(RightCurlyCheck.class);
+
         moduleConfig.addAttribute("option", RightCurlyOption.SAME.toString());
 
         final String[] expectedViolation = {

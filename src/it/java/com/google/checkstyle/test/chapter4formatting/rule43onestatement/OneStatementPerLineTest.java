@@ -85,6 +85,7 @@ public class OneStatementPerLineTest extends AbstractModuleTestSupport {
         };
 
         final Configuration checkConfig = getModuleConfig("OneStatementPerLine");
+
         final String filePath = new File("src/test/resources-noncompilable/"
             + "com/puppycrawl/tools/checkstyle/checks/coding/onestatementperline/"
             + "InputOneStatementPerLine.java").getCanonicalPath();

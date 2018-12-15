@@ -567,6 +567,9 @@
     </module>
     <module name="GenericWhitespace"/>
     <module name="MethodParamPad"/>
+    <module name="MultilineStatement">
+      <property name="allowVarDefBeforeBlock" value="true"/>
+    </module>
     <module name="NoLineWrap"/>
     <module name="NoWhitespaceAfter">
       <property name="tokens" value="ARRAY_INIT"/>
@@ -631,6 +634,7 @@
       <property name="option" value="eol"/>
     </module>
     <module name="ParenPad"/>
+    <module name="ReturnSeparation"/>
     <module name="SeparatorWrap">
       <property name="tokens" value="DOT"/>
       <property name="tokens" value="AT"/>

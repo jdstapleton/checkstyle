@@ -147,12 +147,14 @@ public class FinalParametersCheck extends AbstractCheck {
             // we can now be sure that there is at least one parameter
             final DetailAST parameters =
                 method.findFirstToken(TokenTypes.PARAMETERS);
+
             DetailAST child = parameters.getFirstChild();
             while (child != null) {
                 // children are PARAMETER_DEF and COMMA
                 if (child.getType() == TokenTypes.PARAMETER_DEF) {
                     checkParam(child);
                 }
+
                 child = child.getNextSibling();
             }
         }
@@ -184,6 +186,7 @@ public class FinalParametersCheck extends AbstractCheck {
                 && !CheckUtil.isReceiverParameter(param)) {
             final DetailAST paramName = param.findFirstToken(TokenTypes.IDENT);
             final DetailAST firstNode = CheckUtil.getFirstNode(param);
+
             log(firstNode,
                 MSG_KEY, paramName.getText());
         }
@@ -196,13 +199,16 @@ public class FinalParametersCheck extends AbstractCheck {
      */
     private boolean isIgnoredParam(DetailAST paramDef) {
         boolean result = false;
+
         if (ignorePrimitiveTypes) {
             final DetailAST parameterType = paramDef
                 .findFirstToken(TokenTypes.TYPE).getFirstChild();
+
             if (primitiveDataTypes.contains(parameterType.getType())) {
                 result = true;
             }
         }
+
         return result;
     }
 

@@ -102,14 +102,17 @@ public final class PackageNamesLoader
      */
     private String getPackageName() {
         final StringBuilder buf = new StringBuilder(256);
+
         final Iterator<String> iterator = packageStack.descendingIterator();
         while (iterator.hasNext()) {
             final String subPackage = iterator.next();
             buf.append(subPackage);
+
             if (!CommonUtil.endsWithChar(subPackage, '.') && iterator.hasNext()) {
                 buf.append('.');
             }
         }
+
         return buf.toString();
     }
 
@@ -184,6 +187,7 @@ public final class PackageNamesLoader
         final Map<String, String> map = new HashMap<>();
         map.put(DTD_PUBLIC_ID, DTD_RESOURCE_NAME);
         map.put(DTD_PUBLIC_CS_ID, DTD_RESOURCE_NAME);
+
         return map;
     }
 

@@ -254,6 +254,7 @@ public abstract class AbstractCheck extends AbstractViolationReporter {
 
         final int col = 1 + CommonUtil.lengthExpandedTabs(
                 getLines()[ast.getLineNo() - 1], ast.getColumnNo(), tabWidth);
+
         context.get().messages.add(
                 new LocalizedMessage(
                         ast.getLineNo(),
@@ -288,6 +289,7 @@ public abstract class AbstractCheck extends AbstractViolationReporter {
             Object... args) {
         final int col = 1 + CommonUtil.lengthExpandedTabs(
             getLines()[lineNo - 1], colNo, tabWidth);
+
         context.get().messages.add(
             new LocalizedMessage(
                 lineNo,

@@ -137,8 +137,10 @@ public final class Main {
                 final LocalizedMessage errorCounterMessage = new LocalizedMessage(1,
                         Definitions.CHECKSTYLE_BUNDLE, ERROR_COUNTER,
                         new String[] {String.valueOf(errorCounter)}, null, Main.class, null);
+
                 System.out.println(errorCounterMessage.getMessage());
             }
+
             if (exitStatus != 0) {
                 System.exit(exitStatus);
             }
@@ -171,6 +173,7 @@ public final class Main {
         // return error if something is wrong in arguments
         final List<File> filesToProcess = getFilesToProcess(options);
         final List<String> messages = options.validateCli(parseResult, filesToProcess);
+
         final boolean hasMessages = !messages.isEmpty();
         if (hasMessages) {
             messages.forEach(System.out::println);
@@ -179,6 +182,7 @@ public final class Main {
         else {
             exitStatus = runCli(options, filesToProcess);
         }
+
         return exitStatus;
     }
 
@@ -194,6 +198,7 @@ public final class Main {
         for (File file : options.files) {
             result.addAll(listFiles(file, patternsToExclude));
         }
+
         return result;
     }
 
@@ -226,6 +231,7 @@ public final class Main {
                 result.add(node);
             }
         }
+
         return result;
     }
 
@@ -267,14 +273,18 @@ public final class Main {
         if (options.printAst) {
             // print AST
             final File file = filesToProcess.get(0);
+
             final String stringAst = AstTreeStringPrinter.printFileAst(file,
                     JavaParser.Options.WITHOUT_COMMENTS);
+
             System.out.print(stringAst);
         }
         else if (options.printAstWithComments) {
             final File file = filesToProcess.get(0);
+
             final String stringAst = AstTreeStringPrinter.printFileAst(file,
                     JavaParser.Options.WITH_COMMENTS);
+
             System.out.print(stringAst);
         }
         else if (options.printJavadocTree) {
@@ -289,9 +299,11 @@ public final class Main {
         }
         else if (hasSuppressionLineColumnNumber) {
             final File file = filesToProcess.get(0);
+
             final String stringSuppressions =
                     SuppressionsStringPrinter.printSuppressions(file,
                             options.suppressionLineColumnNumber, options.tabWidth);
+
             System.out.print(stringSuppressions);
         }
         else {
@@ -303,8 +315,10 @@ public final class Main {
                 parentLogger.addHandler(handler);
                 parentLogger.setLevel(Level.FINEST);
             }
+
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Checkstyle debug logging enabled");
+
                 LOG.debug("Running Checkstyle with version: "
                         + Main.class.getPackage().getImplementationVersion());
             }
@@ -370,8 +384,10 @@ public final class Main {
                     final DefaultConfiguration moduleConfig =
                             new DefaultConfiguration(
                                     XpathFileGeneratorAstFilter.class.getName());
+
                     moduleConfig.addAttribute(CliOptions.ATTRIB_TAB_WIDTH_NAME,
                             String.valueOf(options.tabWidth));
+
                     ((DefaultConfiguration) treeWalkerConfig).addChild(moduleConfig);
                 }
 
@@ -415,6 +431,7 @@ public final class Main {
             final LocalizedMessage loadPropertiesExceptionMessage = new LocalizedMessage(1,
                     Definitions.CHECKSTYLE_BUNDLE, LOAD_PROPERTIES_EXCEPTION,
                     new String[] {file.getAbsolutePath()}, null, Main.class, null);
+
             throw new CheckstyleException(loadPropertiesExceptionMessage.getMessage(), ex);
         }
 
@@ -453,6 +470,7 @@ public final class Main {
                 break;
             }
         }
+
         return result;
     }
 
@@ -468,8 +486,10 @@ public final class Main {
     private static AuditListener createListener(OutputFormat format, Path outputLocation)
             throws IOException {
         final OutputStream out = getOutputStream(outputLocation);
+
         final AutomaticBean.OutputStreamOptions closeOutputStreamOption =
                 getOutputStreamOptions(outputLocation);
+
         return format.createListener(out, closeOutputStreamOption);
     }
 
@@ -489,6 +509,7 @@ public final class Main {
         else {
             result = Files.newOutputStream(outputPath);
         }
+
         return result;
     }
 
@@ -505,6 +526,7 @@ public final class Main {
         else {
             result = AutomaticBean.OutputStreamOptions.CLOSE;
         }
+
         return result;
     }
 
@@ -533,6 +555,7 @@ public final class Main {
             else {
                 result = new DefaultLogger(out, options);
             }
+
             return result;
         }
 
@@ -704,9 +727,12 @@ public final class Main {
          */
         private List<Pattern> getExclusions() {
             final List<Pattern> result = new ArrayList<>();
+
             exclude.forEach(file -> result.add(
                     Pattern.compile("^" + Pattern.quote(file.getAbsolutePath()) + "$")));
+
             result.addAll(excludeRegex);
+
             return result;
         }
 
@@ -761,9 +787,11 @@ public final class Main {
                     result.add(String.format(Locale.ROOT,
                             "Could not find file '%s'.", propertiesFile));
                 }
+
                 if (checkerThreadsNumber < 1) {
                     result.add("Checker threads number must be greater than zero");
                 }
+
                 if (treeWalkerThreadsNumber < 1) {
                     result.add("TreeWalker threads number must be greater than zero");
                 }

@@ -236,12 +236,14 @@ public class LeftCurlyCheck
      */
     private static DetailAST getBraceAsFirstChild(DetailAST ast) {
         DetailAST brace = null;
+
         if (ast != null) {
             final DetailAST candidate = ast.getFirstChild();
             if (candidate != null && candidate.getType() == TokenTypes.SLIST) {
                 brace = candidate;
             }
         }
+
         return brace;
     }
 
@@ -280,6 +282,7 @@ public class LeftCurlyCheck
                 }
             }
         }
+
         return resultNode;
     }
 
@@ -292,11 +295,13 @@ public class LeftCurlyCheck
     private static DetailAST getFirstAnnotationOnSameLine(DetailAST annotation) {
         DetailAST previousAnnotation = annotation;
         final int lastAnnotationLineNumber = previousAnnotation.getLineNo();
+
         while (previousAnnotation.getPreviousSibling() != null
                 && previousAnnotation.getPreviousSibling().getLineNo()
                     == lastAnnotationLineNumber) {
             previousAnnotation = previousAnnotation.getPreviousSibling();
         }
+
         return previousAnnotation;
     }
 
@@ -308,10 +313,12 @@ public class LeftCurlyCheck
      */
     private static DetailAST findLastAnnotation(DetailAST modifiers) {
         DetailAST annotation = modifiers.findFirstToken(TokenTypes.ANNOTATION);
+
         while (annotation != null && annotation.getNextSibling() != null
                && annotation.getNextSibling().getType() == TokenTypes.ANNOTATION) {
             annotation = annotation.getNextSibling();
         }
+
         return annotation;
     }
 
@@ -351,6 +358,7 @@ public class LeftCurlyCheck
         if (CommonUtil.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
             log(brace, MSG_KEY_LINE_PREVIOUS, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
         }
+
         if (!hasLineBreakAfter(brace)) {
             log(brace, MSG_KEY_LINE_BREAK_AFTER, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
         }
@@ -386,6 +394,7 @@ public class LeftCurlyCheck
      */
     private boolean hasLineBreakAfter(DetailAST leftCurly) {
         DetailAST nextToken = null;
+
         if (leftCurly.getType() == TokenTypes.SLIST) {
             nextToken = leftCurly.getFirstChild();
         }
@@ -395,6 +404,7 @@ public class LeftCurlyCheck
                 nextToken = leftCurly.getNextSibling();
             }
         }
+
         return nextToken == null
                 || nextToken.getType() == TokenTypes.RCURLY
                 || leftCurly.getLineNo() != nextToken.getLineNo();

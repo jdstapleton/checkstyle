@@ -179,6 +179,7 @@ public final class ConfigurationLoader {
         map.put(DTD_PUBLIC_CS_ID_1_1, DTD_CONFIGURATION_NAME_1_1);
         map.put(DTD_PUBLIC_CS_ID_1_2, DTD_CONFIGURATION_NAME_1_2);
         map.put(DTD_PUBLIC_CS_ID_1_3, DTD_CONFIGURATION_NAME_1_3);
+
         return map;
     }
 
@@ -265,6 +266,7 @@ public final class ConfigurationLoader {
         // figure out if this is a File or a URL
         final URI uri = CommonUtil.getUriByFilename(config);
         final InputSource source = new InputSource(uri.toString());
+
         return loadConfiguration(source, overridePropsResolver,
                 omitIgnoredModules, threadModeSettings);
     }
@@ -341,13 +343,16 @@ public final class ConfigurationLoader {
             final ConfigurationLoader loader =
                 new ConfigurationLoader(overridePropsResolver,
                                         omitIgnoredModules, threadModeSettings);
+
             loader.parseInputSource(configSource);
+
             return loader.configuration;
         }
         catch (final SAXParseException ex) {
             final String message = String.format(Locale.ROOT, SAX_PARSE_EXCEPTION_FORMAT,
                     UNABLE_TO_PARSE_EXCEPTION_PREFIX,
                     ex.getMessage(), ex.getLineNumber(), ex.getColumnNumber());
+
             throw new CheckstyleException(message, ex);
         }
         catch (final ParserConfigurationException | IOException | SAXException ex) {
@@ -392,6 +397,7 @@ public final class ConfigurationLoader {
         // figure out if this is a File or a URL
         final URI uri = CommonUtil.getUriByFilename(config);
         final InputSource source = new InputSource(uri.toString());
+
         return loadConfiguration(source, overridePropsResolver,
                 ignoredModulesOptions, threadModeSettings);
     }
@@ -437,16 +443,20 @@ public final class ConfigurationLoader {
             throws CheckstyleException {
         try {
             final boolean omitIgnoreModules = ignoredModulesOptions == IgnoredModulesOptions.OMIT;
+
             final ConfigurationLoader loader =
                     new ConfigurationLoader(overridePropsResolver,
                             omitIgnoreModules, threadModeSettings);
+
             loader.parseInputSource(configSource);
+
             return loader.configuration;
         }
         catch (final SAXParseException ex) {
             final String message = String.format(Locale.ROOT, SAX_PARSE_EXCEPTION_FORMAT,
                     UNABLE_TO_PARSE_EXCEPTION_PREFIX,
                     ex.getMessage(), ex.getLineNumber(), ex.getColumnNumber());
+
             throw new CheckstyleException(message, ex);
         }
         catch (final ParserConfigurationException | IOException | SAXException ex) {
@@ -496,15 +506,18 @@ public final class ConfigurationLoader {
             if (fragment == null) {
                 final String propertyName = propertyRefsIterator.next();
                 fragment = props.resolve(propertyName);
+
                 if (fragment == null) {
                     if (defaultValue != null) {
                         sb.replace(0, sb.length(), defaultValue);
                         break;
                     }
+
                     throw new CheckstyleException(
                         "Property ${" + propertyName + "} has not been set");
                 }
             }
+
             sb.append(fragment);
         }
 
@@ -556,6 +569,7 @@ public final class ConfigurationLoader {
                     throw new CheckstyleException("Syntax error in property: "
                                                     + value);
                 }
+
                 final String propertyName = value.substring(pos + 2, endName);
                 fragments.add(null);
                 propertyRefs.add(propertyName);
@@ -570,6 +584,7 @@ public final class ConfigurationLoader {
                     //new behaviour: $X maps to $X for all values of X!='$'
                     fragments.add(value.substring(pos, pos + 2));
                 }
+
                 prev = pos + 2;
             }
 
@@ -629,6 +644,7 @@ public final class ConfigurationLoader {
                 //create configuration
                 final String originalName = attributes.getValue(NAME);
                 final String name = threadModeSettings.resolveName(originalName);
+
                 final DefaultConfiguration conf =
                     new DefaultConfiguration(name, threadModeSettings);
 
@@ -640,6 +656,7 @@ public final class ConfigurationLoader {
                 if (!configStack.isEmpty()) {
                     final DefaultConfiguration top =
                         configStack.peek();
+
                     top.addChild(conf);
                 }
 
@@ -656,11 +673,13 @@ public final class ConfigurationLoader {
                     // -@cs[IllegalInstantiation] SAXException is in the overridden method signature
                     throw new SAXException(ex);
                 }
+
                 final String name = attributes.getValue(NAME);
 
                 //add to attributes of configuration
                 final DefaultConfiguration top =
                     configStack.peek();
+
                 top.addAttribute(name, value);
             }
             else if (qName.equals(MESSAGE)) {
@@ -711,6 +730,7 @@ public final class ConfigurationLoader {
                 if (omitModule && !configStack.isEmpty()) {
                     final DefaultConfiguration parentModule =
                         configStack.peek();
+
                     parentModule.removeChild(recentModule);
                 }
             }
@@ -724,8 +744,10 @@ public final class ConfigurationLoader {
          */
         private boolean containsAttribute(Configuration module, String attributeName) {
             final String[] names = module.getAttributeNames();
+
             final Optional<String> result = Arrays.stream(names)
                     .filter(name -> name.equals(attributeName)).findFirst();
+
             return result.isPresent();
         }
 

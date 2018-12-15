@@ -115,36 +115,52 @@ public abstract class AutomaticBean
     private static void registerIntegralTypes(ConvertUtilsBean cub) {
         cub.register(new BooleanConverter(), Boolean.TYPE);
         cub.register(new BooleanConverter(), Boolean.class);
+
         cub.register(new ArrayConverter(
             boolean[].class, new BooleanConverter()), boolean[].class);
+
         cub.register(new ByteConverter(), Byte.TYPE);
         cub.register(new ByteConverter(), Byte.class);
+
         cub.register(new ArrayConverter(byte[].class, new ByteConverter()),
             byte[].class);
+
         cub.register(new CharacterConverter(), Character.TYPE);
         cub.register(new CharacterConverter(), Character.class);
+
         cub.register(new ArrayConverter(char[].class, new CharacterConverter()),
             char[].class);
+
         cub.register(new DoubleConverter(), Double.TYPE);
         cub.register(new DoubleConverter(), Double.class);
+
         cub.register(new ArrayConverter(double[].class, new DoubleConverter()),
             double[].class);
+
         cub.register(new FloatConverter(), Float.TYPE);
         cub.register(new FloatConverter(), Float.class);
+
         cub.register(new ArrayConverter(float[].class, new FloatConverter()),
             float[].class);
+
         cub.register(new IntegerConverter(), Integer.TYPE);
         cub.register(new IntegerConverter(), Integer.class);
+
         cub.register(new ArrayConverter(int[].class, new IntegerConverter()),
             int[].class);
+
         cub.register(new LongConverter(), Long.TYPE);
         cub.register(new LongConverter(), Long.class);
+
         cub.register(new ArrayConverter(long[].class, new LongConverter()),
             long[].class);
+
         cub.register(new ShortConverter(), Short.TYPE);
         cub.register(new ShortConverter(), Short.class);
+
         cub.register(new ArrayConverter(short[].class, new ShortConverter()),
             short[].class);
+
         cub.register(new RelaxedStringArrayConverter(), String[].class);
 
         // BigDecimal, BigInteger, Class, Date, String, Time, TimeStamp
@@ -218,12 +234,15 @@ public abstract class AutomaticBean
                 // figure out if the bean property really exists.
                 final PropertyDescriptor descriptor =
                         PropertyUtils.getPropertyDescriptor(this, key);
+
                 if (descriptor == null) {
                     final String message = String.format(Locale.ROOT, "Property '%s' in module %s "
                             + "does not exist, please check the documentation", key, moduleName);
+
                     throw new CheckstyleException(message);
                 }
             }
+
             // finally we can set the bean property
             beanUtils.copyProperty(this, key, value);
         }
@@ -235,11 +254,13 @@ public abstract class AutomaticBean
             // to satisfy UTs coverage
             final String message = String.format(Locale.ROOT,
                     "Cannot set property '%s' to '%s' in module %s", key, value, moduleName);
+
             throw new CheckstyleException(message, ex);
         }
         catch (final IllegalArgumentException | ConversionException ex) {
             final String message = String.format(Locale.ROOT, "illegal value '%s' for property "
                     + "'%s' of module %s", value, key, moduleName);
+
             throw new CheckstyleException(message, ex);
         }
     }
@@ -358,6 +379,7 @@ public abstract class AutomaticBean
             // Convert to a String and trim it for the tokenizer.
             final StringTokenizer tokenizer = new StringTokenizer(
                 value.toString().trim(), COMMA_SEPARATOR);
+
             final List<String> result = new ArrayList<>();
 
             while (tokenizer.hasMoreTokens()) {
@@ -386,6 +408,7 @@ public abstract class AutomaticBean
             // Converts to a String and trims it for the tokenizer.
             final StringTokenizer tokenizer = new StringTokenizer(
                 value.toString().trim(), COMMA_SEPARATOR);
+
             final List<AccessModifier> result = new ArrayList<>();
 
             while (tokenizer.hasMoreTokens()) {

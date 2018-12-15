@@ -80,8 +80,10 @@ public abstract class AbstractFileSetCheck
         if (CommonUtil.matchesFileExtension(file, fileExtensions)) {
             processFiltered(file, fileText);
         }
+
         final SortedSet<LocalizedMessage> result = new TreeSet<>(messages);
         messages.clear();
+
         return result;
     }
 
@@ -127,6 +129,7 @@ public abstract class AbstractFileSetCheck
         }
 
         fileExtensions = new String[extensions.length];
+
         for (int i = 0; i < extensions.length; i++) {
             final String extension = extensions[i];
             if (CommonUtil.startsWithChar(extension, '.')) {

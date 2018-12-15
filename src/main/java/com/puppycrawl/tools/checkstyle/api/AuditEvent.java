@@ -118,9 +118,11 @@ public final class AuditEvent
      */
     public SeverityLevel getSeverityLevel() {
         SeverityLevel severityLevel = SeverityLevel.INFO;
+
         if (localizedMessage != null) {
             severityLevel = localizedMessage.getSeverityLevel();
         }
+
         return severityLevel;
     }
 

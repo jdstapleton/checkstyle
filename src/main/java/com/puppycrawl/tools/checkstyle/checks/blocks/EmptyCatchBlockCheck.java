@@ -209,6 +209,7 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
     private void visitCatchBlock(DetailAST catchAst) {
         if (isEmptyCatchBlock(catchAst)) {
             final String commentContent = getCommentFirstLine(catchAst);
+
             if (isVerifiable(catchAst, commentContent)) {
                 log(catchAst.getLineNo(), MSG_KEY_CATCH_BLOCK_EMPTY);
             }
@@ -225,11 +226,13 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
         final DetailAST slistToken = catchAst.getLastChild();
         final DetailAST firstElementInBlock = slistToken.getFirstChild();
         String commentContent = "";
+
         if (firstElementInBlock.getType() == TokenTypes.SINGLE_LINE_COMMENT) {
             commentContent = firstElementInBlock.getFirstChild().getText();
         }
         else if (firstElementInBlock.getType() == TokenTypes.BLOCK_COMMENT_BEGIN) {
             commentContent = firstElementInBlock.getFirstChild().getText();
+
             final String[] lines = commentContent.split(System.getProperty("line.separator"));
             for (String line : lines) {
                 if (!line.isEmpty()) {
@@ -238,6 +241,7 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
                 }
             }
         }
+
         return commentContent;
     }
 
@@ -250,10 +254,13 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
      */
     private boolean isVerifiable(DetailAST emptyCatchAst, String commentContent) {
         final String variableName = getExceptionVariableName(emptyCatchAst);
+
         final boolean isMatchingVariableName = variableNameRegexp
                 .matcher(variableName).find();
+
         final boolean isMatchingCommentContent = !commentContent.isEmpty()
                  && commentRegexp.matcher(commentContent).find();
+
         return !isMatchingVariableName && !isMatchingCommentContent;
     }
 
@@ -266,14 +273,17 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
         boolean result = true;
         final DetailAST slistToken = catchAst.findFirstToken(TokenTypes.SLIST);
         DetailAST catchBlockStmt = slistToken.getFirstChild();
+
         while (catchBlockStmt.getType() != TokenTypes.RCURLY) {
             if (catchBlockStmt.getType() != TokenTypes.SINGLE_LINE_COMMENT
                  && catchBlockStmt.getType() != TokenTypes.BLOCK_COMMENT_BEGIN) {
                 result = false;
                 break;
             }
+
             catchBlockStmt = catchBlockStmt.getNextSibling();
         }
+
         return result;
     }
 
@@ -285,6 +295,7 @@ public class EmptyCatchBlockCheck extends AbstractCheck {
     private static String getExceptionVariableName(DetailAST catchAst) {
         final DetailAST parameterDef = catchAst.findFirstToken(TokenTypes.PARAMETER_DEF);
         final DetailAST variableName = parameterDef.findFirstToken(TokenTypes.IDENT);
+
         return variableName.getText();
     }
 

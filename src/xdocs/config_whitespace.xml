@@ -864,6 +864,79 @@ sort(list, Comparable::&lt;String&gt;compareTo);             // Method reference
       </subsection>
     </section>
 
+    <section name="MultilineStatement">
+      <subsection name="Description" id="MultilineStatement_Description">
+          <p>
+              Checks that multiline statements are padded with an empty line on either side of them.
+          </p>
+      </subsection>
+
+        <subsection name="Properties" id="MultilineStatement_Properties">
+            <table>
+                <tr>
+                    <th>name</th>
+                    <th>description</th>
+                    <th>type</th>
+                    <th>default value</th>
+                    <th>since</th>
+                </tr>
+                <tr>
+                    <td>allowVarDefBeforeBlock</td>
+                    <td>
+                        whether to allow a single variable definition immediately before a block,
+                        rather than enforcing an empty line in between.
+                    </td>
+                    <td><a href="property_types.html#boolean">Boolean</a></td>
+                    <td><code>false</code></td>
+                    <td>8.16</td>
+                </tr>
+            </table>
+        </subsection>
+
+      <subsection name="Examples" id="MultilineStatement_Examples">
+          <p>
+              To configure the check:
+          </p>
+          <source>
+              &lt;module name=&quot;MultilineStatement&quot;/&gt;
+          </source>
+      </subsection>
+
+      <subsection name="Example of Usage" id="MultilineStatement_Example_of_Usage">
+          <ul>
+              <li>
+                  <a href="https://github.com/search?q=path%3Aconfig+filename%3Acheckstyle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+MultilineStatement">
+                      Checkstyle Style</a>
+              </li>
+          </ul>
+      </subsection>
+
+      <subsection name="Error Messages" id="MultilineStatement_Error_Messages">
+          <ul>
+              <li>
+                  <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fwhitespace+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22noPaddingAroundMultiLineStatement%22">
+                      noPaddingAroundMultiLineStatement</a>
+              </li>
+              <p>
+                  All messages can be customized if the default message doesn't suit you.
+                  Please <a href="config.html#Custom_messages">see the documentation</a> to learn how to.
+              </p>
+          </ul>
+      </subsection>
+
+      <subsection name="Package" id="MultilineStatement_Package">
+          <p>
+              com.puppycrawl.tools.checkstyle.checks.whitespace
+          </p>
+      </subsection>
+
+      <subsection name="Parent Module" id="MultilineStatement_Parent_Module">
+          <p>
+              <a href="config.html#TreeWalker">TreeWalker</a>
+          </p>
+      </subsection>
+  </section>
+
     <section name="NoLineWrap">
       <subsection name="Description" id="NoLineWrap_Description">
         <p>Since Checkstyle 5.8</p>
@@ -1834,6 +1907,58 @@ try (Closeable resource = acquire(); ) // no check before right parenthesis
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
       </subsection>
+    </section>
+
+    <section name="ReturnSeparation">
+       <subsection name="Description" id="ReturnSeparation_Description">
+           <p>
+               Checks that multiline statements are padded with an empty line on
+               either side of them.
+           </p>
+       </subsection>
+
+       <subsection name="Examples" id="ReturnSeparation_Examples">
+           <p>
+               To configure the check:
+           </p>
+           <source>
+               &lt;module name=&quot;ReturnSeparation&quot;/&gt;
+           </source>
+       </subsection>
+
+       <subsection name="Example of Usage" id="ReturnSeparation_Example_of_Usage">
+           <ul>
+               <li>
+                   <a href="https://github.com/search?q=path%3Aconfig+filename%3Acheckstyle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+ReturnSeparation">
+                       Checkstyle Style</a>
+               </li>
+           </ul>
+       </subsection>
+
+       <subsection name="Error Messages" id="ReturnSeparation_Error_Messages">
+           <ul>
+               <li>
+                   <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fwhitespace+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22noEmptyLineBeforeReturn%22">
+                       noEmptyLineBeforeReturn</a>
+               </li>
+           </ul>
+           <p>
+               All messages can be customized if the default message doesn't suit you.
+               Please <a href="config.html#Custom_messages">see the documentation</a> to learn how to.
+           </p>
+       </subsection>
+
+       <subsection name="Package" id="ReturnSeparation_Package">
+           <p>
+               com.puppycrawl.tools.checkstyle.checks.whitespace
+           </p>
+       </subsection>
+
+       <subsection name="Parent Module" id="ReturnSeparation_Parent_Module">
+           <p>
+               <a href="config.html#TreeWalker">TreeWalker</a>
+           </p>
+       </subsection>
     </section>
 
     <section name="SeparatorWrap">

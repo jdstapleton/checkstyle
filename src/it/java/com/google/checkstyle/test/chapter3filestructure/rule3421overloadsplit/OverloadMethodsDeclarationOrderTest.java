@@ -36,6 +36,7 @@ public class OverloadMethodsDeclarationOrderTest extends AbstractModuleTestSuppo
     public void testOverloadMethods() throws Exception {
         final Class<OverloadMethodsDeclarationOrderCheck> clazz =
             OverloadMethodsDeclarationOrderCheck.class;
+
         final String messageKey = "overload.methods.declaration";
 
         final String[] expected = {

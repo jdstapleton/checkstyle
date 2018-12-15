@@ -89,6 +89,7 @@ public class ThreadModeSettings implements Serializable {
                 throw new IllegalArgumentException(
                         "Multi thread mode for Checker module is not implemented");
             }
+
             if (TREE_WALKER_MODULE_NAME.equals(name)) {
                 throw new IllegalArgumentException(
                         "Multi thread mode for TreeWalker module is not implemented");

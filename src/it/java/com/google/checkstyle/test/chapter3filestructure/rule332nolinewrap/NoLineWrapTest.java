@@ -63,6 +63,7 @@ public class NoLineWrapTest extends AbstractModuleTestSupport {
     @Test
     public void goodLineLength() throws Exception {
         final int maxLineLength = 100;
+
         final String[] expected = {
             "5: " + getCheckMessage(LineLengthCheck.class, "maxLineLen", maxLineLength, 112),
             "29: " + getCheckMessage(LineLengthCheck.class, "maxLineLen", maxLineLength, 113),

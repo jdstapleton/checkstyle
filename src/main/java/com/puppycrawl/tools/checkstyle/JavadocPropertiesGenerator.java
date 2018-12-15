@@ -100,6 +100,7 @@ public final class JavadocPropertiesGenerator {
                 StandardCharsets.UTF_8.name())) {
             final DetailAST top = JavaParser.parseFile(options.inputFile,
                     JavaParser.Options.WITH_COMMENTS);
+
             final DetailAST objBlock = getClassBody(top);
             if (objBlock != null) {
                 iteratePublicStaticIntFields(objBlock, writer::println);
@@ -142,10 +143,12 @@ public final class JavadocPropertiesGenerator {
         while (ast != null && ast.getType() != TokenTypes.CLASS_DEF) {
             ast = ast.getNextSibling();
         }
+
         DetailAST objBlock = null;
         if (ast != null) {
             objBlock = ast.findFirstToken(TokenTypes.OBJBLOCK);
         }
+
         return objBlock;
     }
 
@@ -159,13 +162,16 @@ public final class JavadocPropertiesGenerator {
         if (result) {
             final DetailAST type = ast.findFirstToken(TokenTypes.TYPE);
             result = type.getFirstChild().getType() == TokenTypes.LITERAL_INT;
+
             if (result) {
                 final DetailAST modifiers = ast.findFirstToken(TokenTypes.MODIFIERS);
+
                 result = modifiers.findFirstToken(TokenTypes.LITERAL_PUBLIC) != null
                     && modifiers.findFirstToken(TokenTypes.LITERAL_STATIC) != null
                     && modifiers.findFirstToken(TokenTypes.FINAL) != null;
             }
         }
+
         return result;
     }
 
@@ -204,6 +210,7 @@ public final class JavadocPropertiesGenerator {
                 firstSentence = getFirstJavadocSentence(tree);
             }
         }
+
         return firstSentence;
     }
 
@@ -239,6 +246,7 @@ public final class JavadocPropertiesGenerator {
                 formatHtmlElement(builder, node);
             }
         }
+
         return firstSentence;
     }
 
@@ -264,6 +272,7 @@ public final class JavadocPropertiesGenerator {
                     else {
                         builder.append(node.getText());
                     }
+
                     break;
                 // Empty content tags.
                 case JavadocTokenTypes.LITERAL_LITERAL:
@@ -296,6 +305,7 @@ public final class JavadocPropertiesGenerator {
                 for (DetailNode child : node.getChildren()) {
                     formatHtmlElement(builder, child);
                 }
+
                 break;
         }
     }

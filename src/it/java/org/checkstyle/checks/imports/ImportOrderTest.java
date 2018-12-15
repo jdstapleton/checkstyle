@@ -36,12 +36,15 @@ public class ImportOrderTest extends AbstractModuleTestSupport {
     @Test
     public void testAndroid() throws Exception {
         final DefaultConfiguration checkConfig = createModuleConfig(ImportOrderCheck.class);
+
         checkConfig.addAttribute("groups",
             "android,androidx,com.android,dalvik,com,gov,junit,libcore,net,org,java,javax");
+
         checkConfig.addAttribute("option", "top");
         checkConfig.addAttribute("ordered", "true");
         checkConfig.addAttribute("separated", "true");
         checkConfig.addAttribute("separatedStaticGroups", "true");
+
         checkConfig.addAttribute("staticGroups",
             "android,androidx,com.android,dalvik,com,gov,junit,libcore,net,org,java,javax");
 
@@ -76,6 +79,7 @@ public class ImportOrderTest extends AbstractModuleTestSupport {
         checkConfig.addAttribute("ordered", "true");
         checkConfig.addAttribute("separated", "true");
         checkConfig.addAttribute("separatedStaticGroups", "true");
+
         checkConfig.addAttribute("staticGroups",
             "android,com.twitter,com,junit,net,org,java,javax");
 

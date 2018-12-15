@@ -48,8 +48,10 @@ public class JavadocParagraphTest extends AbstractModuleTestSupport {
     public void testJavadocParagraphIncorrect() throws Exception {
         final String msgBefore = getCheckMessage(JavadocParagraphCheck.class,
                 "javadoc.paragraph.line.before");
+
         final String msgRed = getCheckMessage(JavadocParagraphCheck.class,
                 "javadoc.paragraph.redundant.paragraph");
+
         final String msgMisplaced = getCheckMessage(JavadocParagraphCheck.class,
                 "javadoc.paragraph.misplaced.tag");
 

@@ -173,6 +173,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
         fileSetChecks.clear();
         beforeExecutionFileFilters.clear();
         filters.clear();
+
         if (cacheFile != null) {
             try {
                 cacheFile.persist();
@@ -207,6 +208,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
 
         // Prepare to start
         fireAuditStarted();
+
         for (final FileSetCheck fsc : fileSetChecks) {
             fsc.beginProcessing(charset);
         }
@@ -214,6 +216,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
         final List<File> targetFiles = files.stream()
                 .filter(file -> CommonUtil.matchesFileExtension(file, fileExtensions))
                 .collect(Collectors.toList());
+
         processFiles(targetFiles);
 
         // Finish up
@@ -225,6 +228,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
 
         final int errorCount = counter.getCount();
         fireAuditFinished();
+
         return errorCount;
     }
 
@@ -236,18 +240,23 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
      */
     private Set<String> getExternalResourceLocations() {
         final Set<String> externalResources = new HashSet<>();
+
         fileSetChecks.stream().filter(check -> check instanceof ExternalResourceHolder)
             .forEach(check -> {
                 final Set<String> locations =
                     ((ExternalResourceHolder) check).getExternalResourceLocations();
+
                 externalResources.addAll(locations);
             });
+
         filters.getFilters().stream().filter(filter -> filter instanceof ExternalResourceHolder)
             .forEach(filter -> {
                 final Set<String> locations =
                     ((ExternalResourceHolder) filter).getExternalResourceLocations();
+
                 externalResources.addAll(locations);
             });
+
         return externalResources;
     }
 
@@ -282,9 +291,11 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
                         || !acceptFileStarted(fileName)) {
                     continue;
                 }
+
                 if (cacheFile != null) {
                     cacheFile.put(fileName, timestamp);
                 }
+
                 fireFileStarted(fileName);
                 final SortedSet<LocalizedMessage> fileMessages = processFile(file);
                 fireErrors(fileName, fileMessages);
@@ -321,6 +332,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
         }
         catch (final IOException ioe) {
             log.debug("IOException occurred.", ioe);
+
             fileMessages.add(new LocalizedMessage(1,
                     Definitions.CHECKSTYLE_BUNDLE, EXCEPTION_MSG,
                     new String[] {ioe.getMessage()}, null, getClass(), null));
@@ -343,6 +355,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
                     new String[] {sw.getBuffer().toString()},
                     null, getClass(), null));
         }
+
         return fileMessages;
     }
 
@@ -355,6 +368,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
      */
     private boolean acceptFileStarted(String fileName) {
         final String stripped = CommonUtil.relativizeAndNormalizePath(basedir, fileName);
+
         return beforeExecutionFileFilters.accept(stripped);
     }
 
@@ -387,11 +401,13 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
             final AuditEvent event = new AuditEvent(this, stripped, element);
             if (filters.accept(event)) {
                 hasNonFilteredViolations = true;
+
                 for (final AuditListener listener : listeners) {
                     listener.addError(event);
                 }
             }
         }
+
         if (hasNonFilteredViolations && cacheFile != null) {
             cacheFile.remove(fileName);
         }
@@ -426,6 +442,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
 
             final Set<String> packageNames = PackageNamesLoader
                     .getPackageNames(moduleClassLoader);
+
             moduleFactory = new PackageObjectFactory(packageNames,
                     moduleClassLoader);
         }
@@ -462,6 +479,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
             throw new CheckstyleException("cannot initialize module " + name
                     + " - " + ex.getMessage(), ex);
         }
+
         if (child instanceof FileSetCheck) {
             final FileSetCheck fsc = (FileSetCheck) child;
             fsc.init();
@@ -528,6 +546,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
         }
         else {
             fileExtensions = new String[extensions.length];
+
             for (int i = 0; i < extensions.length; i++) {
                 final String extension = extensions[i];
                 if (CommonUtil.startsWithChar(extension, '.')) {
@@ -603,6 +622,7 @@ public class Checker extends AutomaticBean implements MessageDispatcher, RootMod
             final String message = "unsupported charset: '" + charset + "'";
             throw new UnsupportedEncodingException(message);
         }
+
         this.charset = charset;
     }
 

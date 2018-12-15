@@ -44,6 +44,7 @@ public class XpathRegressionRequireThisTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(RequireThisCheck.class);
+
         moduleConfig.addAttribute("validateOnlyOverlapping", "false");
 
         final String[] expectedViolation = {
@@ -67,6 +68,7 @@ public class XpathRegressionRequireThisTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(RequireThisCheck.class);
+
         moduleConfig.addAttribute("validateOnlyOverlapping", "false");
 
         final String[] expectedViolation = {

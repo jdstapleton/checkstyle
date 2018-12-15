@@ -411,6 +411,7 @@ public final class AnnotationUseStyleCheck extends AbstractCheck {
         else if (valuePairCount == 1) {
             final DetailAST valuePair =
                     annotation.findFirstToken(TokenTypes.ANNOTATION_MEMBER_VALUE_PAIR);
+
             final DetailAST nestedArrayInit =
                 valuePair.findFirstToken(TokenTypes.ANNOTATION_ARRAY_INIT);
 
@@ -447,6 +448,7 @@ public final class AnnotationUseStyleCheck extends AbstractCheck {
                 if (arrayInit != null) {
                     logCommaViolation(arrayInit);
                 }
+
                 child = child.getNextSibling();
             }
         }

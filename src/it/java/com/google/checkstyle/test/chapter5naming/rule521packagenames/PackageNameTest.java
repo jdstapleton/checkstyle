@@ -56,6 +56,7 @@ public class PackageNameTest extends AbstractModuleTestSupport {
     public void testBadPackageName() throws Exception {
         final String packagePath =
                 "com.google.checkstyle.test.chapter5naming.rule521packageNamesCamelCase";
+
         final Configuration checkConfig = getModuleConfig("PackageName");
         final String format = checkConfig.getAttribute("format");
         final String msg = getCheckMessage(checkConfig.getMessages(), MSG_KEY, packagePath, format);

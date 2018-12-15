@@ -77,6 +77,7 @@ public final class DefaultConfiguration implements Configuration {
     @Override
     public String[] getAttributeNames() {
         final Set<String> keySet = attributeMap.keySet();
+
         return keySet.toArray(CommonUtil.EMPTY_STRING_ARRAY);
     }
 
@@ -86,6 +87,7 @@ public final class DefaultConfiguration implements Configuration {
             throw new CheckstyleException(
                     "missing key '" + attributeName + "' in " + name);
         }
+
         return attributeMap.get(attributeName);
     }
 

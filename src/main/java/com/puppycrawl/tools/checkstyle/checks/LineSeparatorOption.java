@@ -76,6 +76,7 @@ public enum LineSeparatorOption {
         else {
             result = Arrays.equals(bytes, lineSeparator);
         }
+
         return result;
     }
 

@@ -31,6 +31,7 @@ public class CustomImportOrderTest extends AbstractModuleTestSupport {
     /** Shortcuts to make code more compact. */
     private static final String MSG_LINE_SEPARATOR = CustomImportOrderCheck.MSG_LINE_SEPARATOR;
     private static final String MSG_LEX = CustomImportOrderCheck.MSG_LEX;
+
     private static final String MSG_NONGROUP_EXPECTED =
         CustomImportOrderCheck.MSG_NONGROUP_EXPECTED;
 

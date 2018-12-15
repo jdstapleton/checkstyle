@@ -211,8 +211,10 @@ public class TranslationCheck extends AbstractFileSetCheck {
             if (!isValidLanguageCode(code)) {
                 final LocalizedMessage msg = new LocalizedMessage(1, TRANSLATION_BUNDLE,
                         WRONG_LANGUAGE_CODE_KEY, new Object[] {code}, getId(), getClass(), null);
+
                 final String exceptionMessage = String.format(Locale.ROOT,
                         "%s [%s]", msg.getMessage(), TranslationCheck.class.getSimpleName());
+
                 throw new IllegalArgumentException(exceptionMessage);
             }
         }
@@ -226,12 +228,14 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private static boolean isValidLanguageCode(final String userSpecifiedLanguageCode) {
         boolean valid = false;
         final Locale[] locales = Locale.getAvailableLocales();
+
         for (Locale locale : locales) {
             if (userSpecifiedLanguageCode.equals(locale.toString())) {
                 valid = true;
                 break;
             }
         }
+
         return valid;
     }
 
@@ -277,6 +281,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private void checkExistenceOfRequiredTranslations(ResourceBundle bundle) {
         for (String languageCode : requiredTranslations) {
             final Optional<String> fileName = getMissingFileName(bundle, languageCode);
+
             if (fileName.isPresent()) {
                 logMissingTranslation(bundle.getPath(), fileName.get());
             }
@@ -296,6 +301,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
         final boolean searchForDefaultTranslation;
         final String extension = bundle.getExtension();
         final String baseName = bundle.getBaseName();
+
         if (languageCode == null) {
             searchForDefaultTranslation = true;
             fileNameRegexp = String.format(Locale.ROOT, REGEXP_FORMAT_TO_CHECK_DEFAULT_TRANSLATIONS,
@@ -306,6 +312,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
             fileNameRegexp = String.format(Locale.ROOT,
                 REGEXP_FORMAT_TO_CHECK_REQUIRED_TRANSLATIONS, baseName, languageCode, extension);
         }
+
         Optional<String> missingFileName = Optional.empty();
         if (!bundle.containsFile(fileNameRegexp)) {
             if (searchForDefaultTranslation) {
@@ -317,6 +324,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
                         FILE_NAME_WITH_LANGUAGE_CODE_FORMATTER, baseName, languageCode, extension));
             }
         }
+
         return missingFileName;
     }
 
@@ -343,15 +351,18 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private static Set<ResourceBundle> groupFilesIntoBundles(Set<File> files,
                                                              Pattern baseNameRegexp) {
         final Set<ResourceBundle> resourceBundles = new HashSet<>();
+
         for (File currentFile : files) {
             final String fileName = currentFile.getName();
             final String baseName = extractBaseName(fileName);
             final Matcher baseNameMatcher = baseNameRegexp.matcher(baseName);
+
             if (baseNameMatcher.matches()) {
                 final String extension = CommonUtil.getFileExtension(fileName);
                 final String path = getPath(currentFile.getAbsolutePath());
                 final ResourceBundle newBundle = new ResourceBundle(baseName, path, extension);
                 final Optional<ResourceBundle> bundle = findBundle(resourceBundles, newBundle);
+
                 if (bundle.isPresent()) {
                     bundle.get().addFile(currentFile);
                 }
@@ -361,6 +372,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
                 }
             }
         }
+
         return resourceBundles;
     }
 
@@ -381,6 +393,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
                 break;
             }
         }
+
         return result;
     }
 
@@ -395,8 +408,10 @@ public class TranslationCheck extends AbstractFileSetCheck {
         final String regexp;
         final Matcher languageCountryVariantMatcher =
             LANGUAGE_COUNTRY_VARIANT_PATTERN.matcher(fileName);
+
         final Matcher languageCountryMatcher = LANGUAGE_COUNTRY_PATTERN.matcher(fileName);
         final Matcher languageMatcher = LANGUAGE_PATTERN.matcher(fileName);
+
         if (languageCountryVariantMatcher.matches()) {
             regexp = LANGUAGE_COUNTRY_VARIANT_PATTERN.pattern();
         }
@@ -409,9 +424,11 @@ public class TranslationCheck extends AbstractFileSetCheck {
         else {
             regexp = DEFAULT_TRANSLATION_REGEXP;
         }
+
         // We use substring(...) instead of replace(...), so that the regular expression does
         // not have to be compiled each time it is used inside 'replace' method.
         final String removePattern = regexp.substring("^.+".length());
+
         return fileName.replaceAll(removePattern, "");
     }
 
@@ -439,11 +456,13 @@ public class TranslationCheck extends AbstractFileSetCheck {
             // build a map from files to the keys they contain
             final Set<String> allTranslationKeys = new HashSet<>();
             final Map<File, Set<String>> filesAssociatedWithKeys = new HashMap<>();
+
             for (File currentFile : filesInBundle) {
                 final Set<String> keysInCurrentFile = getTranslationKeys(currentFile);
                 allTranslationKeys.addAll(keysInCurrentFile);
                 filesAssociatedWithKeys.put(currentFile, keysInCurrentFile);
             }
+
             checkFilesForConsistencyRegardingTheirKeys(filesAssociatedWithKeys, allTranslationKeys);
         }
     }
@@ -463,11 +482,13 @@ public class TranslationCheck extends AbstractFileSetCheck {
             final Set<String> currentFileKeys = fileKey.getValue();
             final Set<String> missingKeys = keysThatMustExist.stream()
                 .filter(key -> !currentFileKeys.contains(key)).collect(Collectors.toSet());
+
             if (!missingKeys.isEmpty()) {
                 for (Object key : missingKeys) {
                     log(1, MSG_KEY, key);
                 }
             }
+
             fireErrors(path);
             dispatcher.fireFileFinished(path);
         }
@@ -488,6 +509,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
         catch (final IOException ex) {
             logIoException(ex, file);
         }
+
         return keys;
     }
 
@@ -499,10 +521,12 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private void logIoException(IOException exception, File file) {
         String[] args = null;
         String key = "general.fileNotFound";
+
         if (!(exception instanceof NoSuchFileException)) {
             args = new String[] {exception.getMessage()};
             key = "general.exception";
         }
+
         final LocalizedMessage message =
             new LocalizedMessage(
                 0,
@@ -511,6 +535,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
                 args,
                 getId(),
                 getClass(), null);
+
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
         messages.add(message);
         getMessageDispatcher().fireErrors(file.getPath(), messages);
@@ -579,6 +604,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
                     break;
                 }
             }
+
             return containsFile;
         }
 

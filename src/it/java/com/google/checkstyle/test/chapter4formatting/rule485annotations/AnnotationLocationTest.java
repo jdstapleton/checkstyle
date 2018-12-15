@@ -36,11 +36,13 @@ public class AnnotationLocationTest extends AbstractModuleTestSupport {
     public void testAnnotation() throws Exception {
         final Class<AnnotationLocationCheck> clazz = AnnotationLocationCheck.class;
         getCheckMessage(clazz, "annotation.location.alone");
+
         final Configuration checkConfig = getModuleConfig("AnnotationLocation",
                 "AnnotationLocationMostCases");
 
         final String msgLocationAlone = "annotation.location.alone";
         final String msgLocation = "annotation.location";
+
         final String[] expected = {
             "3: " + getCheckMessage(clazz, msgLocationAlone, "MyAnnotation1"),
             "20: " + getCheckMessage(clazz, msgLocation, "MyAnnotation1", "8", "4"),
@@ -65,10 +67,12 @@ public class AnnotationLocationTest extends AbstractModuleTestSupport {
     public void testAnnotationVariables() throws Exception {
         final Class<AnnotationLocationCheck> clazz = AnnotationLocationCheck.class;
         getCheckMessage(clazz, "annotation.location.alone");
+
         final Configuration checkConfig = getModuleConfig("AnnotationLocation",
                 "AnnotationLocationVariables");
 
         final String msgLocation = "annotation.location";
+
         final String[] expected = {
             "63: " + getCheckMessage(clazz, msgLocation, "MyAnnotation2", "7", "4"),
         };

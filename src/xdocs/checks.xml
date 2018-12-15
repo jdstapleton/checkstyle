@@ -460,6 +460,12 @@
         and the left parenthesis of the parameter list.</td>
       </tr>
       <tr>
+        <td><a href="config_whitespace.html#MultilineStatement">MultilineStatement</a></td>
+        <td>
+          Checks that multiline statements are padded with an empty line on either side of them.
+        </td>
+      </tr>
+      <tr>
         <td><a href="config_naming.html#MethodTypeParameterName">MethodTypeParameterName</a></td>
         <td>
           Checks that class type parameter names conform to a format specified
@@ -642,6 +648,11 @@
         after a left parenthesis and before a right parenthesis, or such spaces are
         forbidden, with the exception that it does
         not check for padding of the right parenthesis at an empty for iterator.</td>
+      </tr>
+      <tr>
+        <td><a href="config_whitespace.html#ReturnSeparation">ReturnSeparation</a></td>
+        <td>
+          Checks that return statements have at least one empty line before another statement.</td>
       </tr>
       <tr>
         <td><a href="config_imports.html#RedundantImport">RedundantImport</a></td>

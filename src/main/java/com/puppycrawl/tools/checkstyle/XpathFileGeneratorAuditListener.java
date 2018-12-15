@@ -73,6 +73,7 @@ public class XpathFileGeneratorAuditListener extends AutomaticBean implements Au
         }
 
         writer.flush();
+
         if (closeStream) {
             writer.close();
         }
@@ -104,6 +105,7 @@ public class XpathFileGeneratorAuditListener extends AutomaticBean implements Au
             if (event.getModuleId() == null) {
                 final String checkName =
                         PackageObjectFactory.getShortFromFullModuleNames(event.getSourceName());
+
                 writer.print("       checks=\"");
                 writer.print(checkName);
             }
@@ -111,6 +113,7 @@ public class XpathFileGeneratorAuditListener extends AutomaticBean implements Au
                 writer.print("       id=\"");
                 writer.print(event.getModuleId());
             }
+
             writer.println(QUOTE_CHAR);
 
             writer.print("       query=\"");
@@ -132,10 +135,13 @@ public class XpathFileGeneratorAuditListener extends AutomaticBean implements Au
         if (!isXmlHeaderPrinted) {
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writer.println("<!DOCTYPE suppressions PUBLIC");
+
             writer.println("    \"-//Checkstyle//DTD SuppressionXpathFilter Experimental "
                     + "Configuration 1.2//EN\"");
+
             writer.println("    \"https://checkstyle.org/dtds/"
                     + "suppressions_1_2_xpath_experimental.dtd\">");
+
             writer.println("<suppressions>");
             isXmlHeaderPrinted = true;
         }

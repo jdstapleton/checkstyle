@@ -133,6 +133,7 @@ public final class FileText {
                 if (line == null) {
                     break;
                 }
+
                 textLines.add(line);
             }
             lines = textLines.toArray(CommonUtil.EMPTY_STRING_ARRAY);
@@ -148,6 +149,7 @@ public final class FileText {
         charset = fileText.charset;
         fullText = fileText.fullText;
         lines = fileText.lines.clone();
+
         if (fileText.lineBreaks == null) {
             lineBreaks = null;
         }
@@ -191,6 +193,7 @@ public final class FileText {
         if (!inputFile.exists()) {
             throw new FileNotFoundException(inputFile.getPath() + " (No such file or directory)");
         }
+
         final StringBuilder buf = new StringBuilder(1024);
         final InputStream stream = Files.newInputStream(inputFile.toPath());
         try (Reader reader = new InputStreamReader(stream, decoder)) {
@@ -200,9 +203,11 @@ public final class FileText {
                 if (len == -1) {
                     break;
                 }
+
                 buf.append(chars, 0, len);
             }
         }
+
         return buf.toString();
     }
 
@@ -250,16 +255,20 @@ public final class FileText {
             final int[] lineBreakPositions = new int[size() + 1];
             lineBreakPositions[0] = 0;
             int lineNo = 1;
+
             final Matcher matcher = LINE_TERMINATOR.matcher(fullText);
             while (matcher.find()) {
                 lineBreakPositions[lineNo] = matcher.end();
                 lineNo++;
             }
+
             if (lineNo < lineBreakPositions.length) {
                 lineBreakPositions[lineNo] = fullText.length();
             }
+
             lineBreaks = lineBreakPositions;
         }
+
         return lineBreaks;
     }
 
@@ -270,14 +279,17 @@ public final class FileText {
      */
     public LineColumn lineColumn(int pos) {
         final int[] lineBreakPositions = findLineBreaks();
+
         int lineNo = Arrays.binarySearch(lineBreakPositions, pos);
         if (lineNo < 0) {
             // we have: lineNo = -(insertion point) - 1
             // we want: lineNo =  (insertion point) - 1
             lineNo = -lineNo - 2;
         }
+
         final int startOfLine = lineBreakPositions[lineNo];
         final int columnNo = pos - startOfLine;
+
         // now we have lineNo and columnNo, both starting at zero.
         return new LineColumn(lineNo + 1, columnNo);
     }

@@ -131,8 +131,10 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
         else {
             final Writer errorStreamWriter = new OutputStreamWriter(errorStream,
                     StandardCharsets.UTF_8);
+
             errorWriter = new PrintWriter(errorStreamWriter);
         }
+
         formatter = messageFormatter;
     }
 
@@ -179,10 +181,13 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
         if (infoStreamOptions == null) {
             throw new IllegalArgumentException("Parameter infoStreamOptions can not be null");
         }
+
         closeInfo = infoStreamOptions == OutputStreamOptions.CLOSE;
+
         if (errorStreamOptions == null) {
             throw new IllegalArgumentException("Parameter errorStreamOptions can not be null");
         }
+
         closeError = errorStreamOptions == OutputStreamOptions.CLOSE;
         final Writer infoStreamWriter = new OutputStreamWriter(infoStream, StandardCharsets.UTF_8);
         infoWriter = new PrintWriter(infoStreamWriter);
@@ -193,8 +198,10 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
         else {
             final Writer errorStreamWriter = new OutputStreamWriter(errorStream,
                     StandardCharsets.UTF_8);
+
             errorWriter = new PrintWriter(errorStreamWriter);
         }
+
         formatter = messageFormatter;
     }
 
@@ -224,6 +231,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
                 Definitions.CHECKSTYLE_BUNDLE, ADD_EXCEPTION_MESSAGE,
                 new String[] {event.getFileName()}, null,
                 LocalizedMessage.class, null);
+
             errorWriter.println(addExceptionMessage.getMessage());
             throwable.printStackTrace(errorWriter);
         }
@@ -234,6 +242,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
         final LocalizedMessage auditStartMessage = new LocalizedMessage(1,
             Definitions.CHECKSTYLE_BUNDLE, AUDIT_STARTED_MESSAGE, null, null,
             LocalizedMessage.class, null);
+
         infoWriter.println(auditStartMessage.getMessage());
         infoWriter.flush();
     }
@@ -243,6 +252,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
         final LocalizedMessage auditFinishMessage = new LocalizedMessage(1,
             Definitions.CHECKSTYLE_BUNDLE, AUDIT_FINISHED_MESSAGE, null, null,
             LocalizedMessage.class, null);
+
         infoWriter.println(auditFinishMessage.getMessage());
         closeStreams();
     }
@@ -262,11 +272,13 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
      */
     private void closeStreams() {
         infoWriter.flush();
+
         if (closeInfo) {
             infoWriter.close();
         }
 
         errorWriter.flush();
+
         if (closeError) {
             errorWriter.close();
         }

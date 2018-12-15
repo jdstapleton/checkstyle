@@ -79,10 +79,12 @@ public class AnnotationOnSameLineCheck extends AbstractCheck {
         if (ast.getType() == TokenTypes.TYPECAST) {
             nodeWithAnnotations = ast.findFirstToken(TokenTypes.TYPE);
         }
+
         DetailAST modifiersNode = nodeWithAnnotations.findFirstToken(TokenTypes.MODIFIERS);
         if (modifiersNode == null) {
             modifiersNode = nodeWithAnnotations.findFirstToken(TokenTypes.ANNOTATIONS);
         }
+
         if (modifiersNode != null) {
             for (DetailAST annotationNode = modifiersNode.getFirstChild();
                     annotationNode != null;
@@ -106,6 +108,7 @@ public class AnnotationOnSameLineCheck extends AbstractCheck {
         if (nextNode == null) {
             nextNode = node.getParent().getNextSibling();
         }
+
         return nextNode;
     }
 
@@ -119,6 +122,7 @@ public class AnnotationOnSameLineCheck extends AbstractCheck {
         if (identNode == null) {
             identNode = annotation.findFirstToken(TokenTypes.DOT).getLastChild();
         }
+
         return identNode.getText();
     }
 

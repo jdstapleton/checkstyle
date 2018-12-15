@@ -44,6 +44,7 @@ public class XpathRegressionImportControlTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(ImportControlCheck.class);
+
         moduleConfig.addAttribute("file", getPath(
                 "SuppressionXpathRegressionImportControlOne.xml"));
 
@@ -67,6 +68,7 @@ public class XpathRegressionImportControlTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(ImportControlCheck.class);
+
         moduleConfig.addAttribute("file", getPath(
                 "SuppressionXpathRegressionImportControlTwo.xml"));
 
@@ -111,6 +113,7 @@ public class XpathRegressionImportControlTest extends AbstractXpathTestSupport {
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(ImportControlCheck.class);
+
         moduleConfig.addAttribute("file",
                 getPath("SuppressionXpathRegressionImportControlFour.xml"));
 

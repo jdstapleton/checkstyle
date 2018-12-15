@@ -139,6 +139,7 @@ public final class MissingDeprecatedCheck extends AbstractCheck {
 
     /** Multiline finished at end of comment. */
     private static final String END_JAVADOC = "*/";
+
     /** Multiline finished at next Javadoc. */
     private static final String NEXT_TAG = "@";
 
@@ -202,6 +203,7 @@ public final class MissingDeprecatedCheck extends AbstractCheck {
      */
     private boolean containsJavadocTag(final TextBlock javadoc) {
         boolean found = false;
+
         if (javadoc != null) {
             final String[] lines = javadoc.getText();
             int currentLine = javadoc.getStartLineNo() - 1;
@@ -218,6 +220,7 @@ public final class MissingDeprecatedCheck extends AbstractCheck {
                         log(currentLine, MSG_KEY_JAVADOC_DUPLICATE_TAG,
                                 JavadocTagInfo.DEPRECATED.getText());
                     }
+
                     found = true;
                 }
                 else if (noArgMultilineStart.find()) {
@@ -226,6 +229,7 @@ public final class MissingDeprecatedCheck extends AbstractCheck {
                 }
             }
         }
+
         return found;
     }
 
@@ -242,20 +246,24 @@ public final class MissingDeprecatedCheck extends AbstractCheck {
     private void checkTagAtTheRestOfComment(String[] lines, boolean foundBefore,
             int currentLine, int index) {
         int reindex = index + 1;
+
         while (reindex <= lines.length - 1) {
             final Matcher multilineCont = MATCH_DEPRECATED_MULTILINE_CONT.matcher(lines[reindex]);
 
             if (multilineCont.find()) {
                 reindex = lines.length;
+
                 final String lFin = multilineCont.group(1);
                 if (lFin.equals(NEXT_TAG) || lFin.equals(END_JAVADOC)) {
                     log(currentLine, MSG_KEY_JAVADOC_MISSING);
                 }
+
                 if (foundBefore) {
                     log(currentLine, MSG_KEY_JAVADOC_DUPLICATE_TAG,
                             JavadocTagInfo.DEPRECATED.getText());
                 }
             }
+
             reindex++;
         }
     }

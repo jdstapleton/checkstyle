@@ -40,6 +40,7 @@ public class ParameterNameTest extends AbstractModuleTestSupport {
         final Configuration config = getModuleConfig("ParameterName");
         final String format = config.getAttribute("format");
         final Map<String, String> messages = config.getMessages();
+
         final String[] expected = {
             "10:21: " + getCheckMessage(messages, MSG_KEY, "bB", format),
             "33:22: " + getCheckMessage(messages, MSG_KEY, "llll_llll", format),

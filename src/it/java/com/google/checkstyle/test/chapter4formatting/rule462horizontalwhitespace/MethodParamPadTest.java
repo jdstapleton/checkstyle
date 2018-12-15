@@ -47,6 +47,7 @@ public class MethodParamPadTest extends AbstractModuleTestSupport {
             "47:18: " + getCheckMessage(clazz, messageKeyPreceded, "("),
             "52:36: " + getCheckMessage(clazz, messageKeyPreceded, "("),
         };
+
         final Configuration checkConfig = getModuleConfig("MethodParamPad");
         final String filePath = getPath("InputMethodParamPad.java");
 

@@ -311,6 +311,7 @@ public class AnnotationLocationCheck extends AbstractCheck {
                 log(annotation.getLineNo(), MSG_KEY_ANNOTATION_LOCATION,
                     getAnnotationName(annotation), annotation.getColumnNo(), correctIndentation);
             }
+
             annotation = annotation.getNextSibling();
         }
     }
@@ -334,6 +335,7 @@ public class AnnotationLocationCheck extends AbstractCheck {
         if (identNode == null) {
             identNode = annotation.findFirstToken(TokenTypes.DOT).findFirstToken(TokenTypes.IDENT);
         }
+
         return identNode.getText();
     }
 
@@ -361,6 +363,7 @@ public class AnnotationLocationCheck extends AbstractCheck {
         else {
             allowingCondition = allowSamelineSingleParameterlessAnnotation;
         }
+
         return allowSamelineMultipleAnnotations
             || allowingCondition && !hasNodeBefore(annotation)
             || !allowingCondition && (!hasNodeBeside(annotation)
@@ -412,12 +415,14 @@ public class AnnotationLocationCheck extends AbstractCheck {
      */
     private static boolean isAllowedPosition(DetailAST annotation, int... allowedPositions) {
         boolean allowed = false;
+
         for (int position : allowedPositions) {
             if (isInSpecificCodeBlock(annotation, position)) {
                 allowed = true;
                 break;
             }
         }
+
         return allowed;
     }
 
@@ -429,6 +434,7 @@ public class AnnotationLocationCheck extends AbstractCheck {
      */
     private static boolean isInSpecificCodeBlock(DetailAST node, int blockType) {
         boolean returnValue = false;
+
         for (DetailAST token = node.getParent(); token != null; token = token.getParent()) {
             final int type = token.getType();
             if (type == blockType) {
@@ -436,6 +442,7 @@ public class AnnotationLocationCheck extends AbstractCheck {
                 break;
             }
         }
+
         return returnValue;
     }
 

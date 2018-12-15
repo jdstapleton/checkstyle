@@ -154,8 +154,10 @@ public class TrailingCommentCheck extends AbstractCheck {
     public void beginTree(DetailAST rootAST) {
         final Map<Integer, TextBlock> cppComments = getFileContents()
                 .getSingleLineComments();
+
         final Map<Integer, List<TextBlock>> cComments = getFileContents()
                 .getBlockComments();
+
         final Set<Integer> lines = new HashSet<>();
         lines.addAll(cppComments.keySet());
         lines.addAll(cComments.keySet());
@@ -164,6 +166,7 @@ public class TrailingCommentCheck extends AbstractCheck {
             final String line = getLines()[lineNo - 1];
             final String lineBefore;
             final TextBlock comment;
+
             if (cppComments.containsKey(lineNo)) {
                 comment = cppComments.get(lineNo);
                 lineBefore = line.substring(0, comment.getStartColNo());
@@ -204,13 +207,16 @@ public class TrailingCommentCheck extends AbstractCheck {
             String commentText = comment.getText()[0];
             // remove chars which start comment
             commentText = commentText.substring(2);
+
             // if this is a C-style comment we need to remove its end
             if (commentText.endsWith("*/")) {
                 commentText = commentText.substring(0, commentText.length() - 2);
             }
+
             commentText = commentText.trim();
             legal = legalComment.matcher(commentText).find();
         }
+
         return legal;
     }
 

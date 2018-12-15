@@ -103,15 +103,18 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
                                     lineNumber,
                                     line));
                 }
+
                 lineNumber++;
             }
         }
+
         return result.toArray(new Integer[0]);
     }
 
     private static int getIndentFromComment(String comment) {
         final Matcher match = GET_INDENT_FROM_COMMENT_REGEX.matcher(comment);
         match.matches();
+
         return Integer.parseInt(match.group(1));
     }
 
@@ -144,6 +147,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
             default:
                 throw new IllegalStateException("Cannot determine comment is consistent");
         }
+
         return result;
     }
 
@@ -173,6 +177,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
         multilevelMatch.matches();
         final String[] levels = multilevelMatch.group(1).split(",");
         final String indentInCommentStr = String.valueOf(indentInComment);
+
         final boolean containsActualLevel =
                 Arrays.asList(levels).contains(indentInCommentStr);
 
@@ -198,6 +203,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
                 }
             }
         }
+
         return result;
     }
 
@@ -209,6 +215,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
                 break;
             }
         }
+
         return lineStart;
     }
 

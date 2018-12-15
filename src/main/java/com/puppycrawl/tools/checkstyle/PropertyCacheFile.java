@@ -97,9 +97,11 @@ final class PropertyCacheFile {
         if (config == null) {
             throw new IllegalArgumentException("config can not be null");
         }
+
         if (fileName == null) {
             throw new IllegalArgumentException("fileName can not be null");
         }
+
         this.config = config;
         this.fileName = fileName;
     }
@@ -116,6 +118,7 @@ final class PropertyCacheFile {
         if (file.exists()) {
             try (InputStream inStream = Files.newInputStream(file.toPath())) {
                 details.load(inStream);
+
                 final String cachedConfigHash = details.getProperty(CONFIG_HASH_KEY);
                 if (!configHash.equals(cachedConfigHash)) {
                     // Detected configuration change - clear cache
@@ -139,6 +142,7 @@ final class PropertyCacheFile {
         if (directory != null) {
             Files.createDirectories(directory);
         }
+
         OutputStream out = null;
         try {
             out = Files.newOutputStream(path);
@@ -166,6 +170,7 @@ final class PropertyCacheFile {
         if (stream != null) {
             Flushables.flush(stream, false);
         }
+
         Closeables.close(stream, false);
     }
 
@@ -177,6 +182,7 @@ final class PropertyCacheFile {
      */
     public boolean isInCache(String uncheckedFileName, long timestamp) {
         final String lastChecked = details.getProperty(uncheckedFileName);
+
         return Objects.equals(lastChecked, Long.toString(timestamp));
     }
 
@@ -285,6 +291,7 @@ final class PropertyCacheFile {
                         contentHashSum));
             }
         }
+
         return resources;
     }
 
@@ -326,6 +333,7 @@ final class PropertyCacheFile {
             else {
                 changed = true;
             }
+
             return changed;
         });
     }
@@ -347,6 +355,7 @@ final class PropertyCacheFile {
      */
     private boolean isResourceLocationInCache(String location) {
         final String cachedHashSum = details.getProperty(location);
+
         return cachedHashSum != null;
     }
 

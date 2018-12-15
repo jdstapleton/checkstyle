@@ -40,6 +40,7 @@ public class MemberNameTest extends AbstractModuleTestSupport {
         final Configuration checkConfig = getModuleConfig("MemberName");
         final String format = checkConfig.getAttribute("format");
         final Map<String, String> messages = checkConfig.getMessages();
+
         final String[] expected = {
             "5:16: " + getCheckMessage(messages, MSG_KEY, "mPublic", format),
             "6:19: " + getCheckMessage(messages, MSG_KEY, "mProtected", format),
@@ -67,6 +68,7 @@ public class MemberNameTest extends AbstractModuleTestSupport {
         final Configuration checkConfig = getModuleConfig("MemberName");
         final String format = checkConfig.getAttribute("format");
         final Map<String, String> messages = checkConfig.getMessages();
+
         final String[] expected = {
             "12:17: " + getCheckMessage(messages, MSG_KEY, "bad$Static", format),
             "17:17: " + getCheckMessage(messages, MSG_KEY, "bad_Member", format),

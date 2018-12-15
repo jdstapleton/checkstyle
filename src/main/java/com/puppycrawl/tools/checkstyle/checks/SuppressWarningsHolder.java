@@ -87,7 +87,9 @@ public class SuppressWarningsHolder
         if (sourceName.endsWith(CHECK_SUFFIX)) {
             endIndex -= CHECK_SUFFIX.length();
         }
+
         final int startIndex = sourceName.lastIndexOf('.') + 1;
+
         return sourceName.substring(startIndex, endIndex).toLowerCase(Locale.ENGLISH);
     }
 
@@ -104,6 +106,7 @@ public class SuppressWarningsHolder
         if (checkAlias == null) {
             checkAlias = getDefaultAlias(sourceName);
         }
+
         return checkAlias;
     }
 
@@ -152,19 +155,24 @@ public class SuppressWarningsHolder
         final int line = event.getLine();
         final int column = event.getColumn();
         boolean suppressed = false;
+
         for (Entry entry : entries) {
             final boolean afterStart = isSuppressedAfterEventStart(line, column, entry);
             final boolean beforeEnd = isSuppressedBeforeEventEnd(line, column, entry);
+
             final boolean nameMatches =
                 ALL_WARNING_MATCHING_ID.equals(entry.getCheckName())
                     || entry.getCheckName().equalsIgnoreCase(checkAlias);
+
             final boolean idMatches = event.getModuleId() != null
                 && event.getModuleId().equals(entry.getCheckName());
+
             if (afterStart && beforeEnd && (nameMatches || idMatches)) {
                 suppressed = true;
                 break;
             }
         }
+
         return suppressed;
     }
 
@@ -226,6 +234,7 @@ public class SuppressWarningsHolder
         if (identifier.startsWith(JAVA_LANG_PREFIX)) {
             identifier = identifier.substring(JAVA_LANG_PREFIX.length());
         }
+
         if ("SuppressWarnings".equals(identifier)) {
             final List<String> values = getAllAnnotationValues(ast);
             if (!isAnnotationEmpty(values)) {
@@ -241,6 +250,7 @@ public class SuppressWarningsHolder
                     final DetailAST nextAST = targetAST.getNextSibling();
                     final int lastLine;
                     final int lastColumn;
+
                     if (nextAST == null) {
                         lastLine = Integer.MAX_VALUE;
                         lastColumn = Integer.MAX_VALUE;
@@ -256,6 +266,7 @@ public class SuppressWarningsHolder
                         String checkName = value;
                         // strip off the checkstyle-only prefix if present
                         checkName = removeCheckstylePrefixIfExists(checkName);
+
                         entries.add(new Entry(checkName, firstLine, firstColumn,
                                 lastLine, lastColumn));
                     }
@@ -276,6 +287,7 @@ public class SuppressWarningsHolder
         if (checkName.startsWith(CHECKSTYLE_PREFIX)) {
             result = checkName.substring(CHECKSTYLE_PREFIX.length());
         }
+
         return result;
     }
 
@@ -312,6 +324,7 @@ public class SuppressWarningsHolder
                     throw new IllegalArgumentException("Unexpected AST: " + nextAST);
             }
         }
+
         return values;
     }
 
@@ -341,6 +354,7 @@ public class SuppressWarningsHolder
                 // unexpected container type
                 throw new IllegalArgumentException("Unexpected container AST: " + parentAST);
         }
+
         return targetAST;
     }
 
@@ -379,6 +393,7 @@ public class SuppressWarningsHolder
                 // it's possible case, but shouldn't be processed here
                 result = null;
         }
+
         return result;
     }
 
@@ -393,6 +408,7 @@ public class SuppressWarningsHolder
         for (int i = 0; i < index && child != null; ++i) {
             child = child.getNextSibling();
         }
+
         return child;
     }
 
@@ -406,6 +422,7 @@ public class SuppressWarningsHolder
         if (ast == null) {
             throw new IllegalArgumentException("Identifier AST expected, but get null.");
         }
+
         final String identifier;
         if (ast.getType() == TokenTypes.IDENT) {
             identifier = ast.getText();
@@ -414,6 +431,7 @@ public class SuppressWarningsHolder
             identifier = getIdentifier(ast.getFirstChild()) + "."
                 + getIdentifier(ast.getLastChild());
         }
+
         return identifier;
     }
 
@@ -443,6 +461,7 @@ public class SuppressWarningsHolder
             default:
                 // annotations with complex expressions cannot suppress warnings
         }
+
         return expr;
     }
 
@@ -466,6 +485,7 @@ public class SuppressWarningsHolder
                 throw new IllegalArgumentException(
                         "Expression or annotation array initializer AST expected: " + ast);
         }
+
         return annotationValues;
     }
 
@@ -481,8 +501,10 @@ public class SuppressWarningsHolder
             if (childAST.getType() == TokenTypes.EXPR) {
                 valueList.add(getStringExpr(childAST));
             }
+
             childAST = childAST.getNextSibling();
         }
+
         return valueList;
     }
 

@@ -62,6 +62,7 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
     protected String getPackageLocation() {
         final String subpackage = getCheckName().toLowerCase(Locale.ENGLISH)
                 .replace("check", "");
+
         return "org/checkstyle/suppressionxpathfilter" + "/" + subpackage;
     }
 
@@ -70,8 +71,10 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
             throws Exception {
         final FileText fileText = new FileText(fileToProcess,
                 StandardCharsets.UTF_8.name());
+
         final DetailAST rootAst = JavaParser.parseFile(fileToProcess,
                 JavaParser.Options.WITH_COMMENTS);
+
         final XpathQueryGenerator queryGenerator = new XpathQueryGenerator(rootAst,
                 position.violationLineNumber, position.violationColumnNumber,
                 fileText, DEFAULT_TAB_WIDTH);
@@ -90,6 +93,7 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
             throws Exception {
 
         final File suppressionsXpathConfigFile = temporaryFolder.newFile();
+
         try (Writer bw = Files.newBufferedWriter(suppressionsXpathConfigFile.toPath(),
                 StandardCharsets.UTF_8)) {
             bw.write("<?xml version=\"1.0\"?>\n");
@@ -116,6 +120,7 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
                                            List<String> xpathQueries) throws Exception {
         final DefaultConfiguration suppressionXpathFilterConfig =
                 createModuleConfig(SuppressionXpathFilter.class);
+
         suppressionXpathFilterConfig.addAttribute("file",
                 createSuppressionsXpathConfigFile(checkName, xpathQueries));
 
@@ -124,13 +129,16 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
 
     private static ViolationPosition extractLineAndColumnNumber(String... expectedViolations) {
         ViolationPosition violation = null;
+
         final Matcher matcher =
                 LINE_COLUMN_NUMBER_REGEX.matcher(expectedViolations[0]);
+
         if (matcher.find()) {
             final int violationLineNumber = Integer.parseInt(matcher.group(1));
             final int violationColumnNumber = Integer.parseInt(matcher.group(2));
             violation = new ViolationPosition(violationLineNumber, violationColumnNumber);
         }
+
         return violation;
     }
 
@@ -154,12 +162,15 @@ public abstract class AbstractXpathTestSupport extends AbstractModuleTestSupport
                                   List<String> expectedXpathQueries) throws Exception {
         final ViolationPosition position =
                 extractLineAndColumnNumber(expectedViolations);
+
         final List<String> generatedXpathQueries =
                 generateXpathQueries(fileToProcess, position);
 
         final DefaultConfiguration treeWalkerConfigWithXpath =
                 createModuleConfig(TreeWalker.class);
+
         treeWalkerConfigWithXpath.addChild(moduleConfig);
+
         treeWalkerConfigWithXpath.addChild(createSuppressionXpathFilter(moduleConfig.getName(),
                 generatedXpathQueries));
 

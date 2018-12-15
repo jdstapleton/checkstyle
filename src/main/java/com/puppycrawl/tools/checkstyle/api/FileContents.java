@@ -43,6 +43,7 @@ public final class FileContents implements CommentListener {
      * itself -- no code.
      */
     private static final String MATCH_SINGLELINE_COMMENT_PAT = "^\\s*//.*$";
+
     /** Compiled regexp to match a single-line comment line. */
     private static final Pattern MATCH_SINGLELINE_COMMENT = Pattern
             .compile(MATCH_SINGLELINE_COMMENT_PAT);
@@ -104,8 +105,10 @@ public final class FileContents implements CommentListener {
     public void reportSingleLineComment(int startLineNo, int startColNo) {
         final String line = line(startLineNo - 1);
         final String[] txt = {line.substring(startColNo)};
+
         final Comment comment = new Comment(txt, startColNo, startLineNo,
                 line.length() - 1);
+
         cppComments.put(startLineNo, comment);
     }
 
@@ -126,6 +129,7 @@ public final class FileContents implements CommentListener {
             int endLineNo, int endColNo) {
         final String[] cComment = extractBlockComment(startLineNo, startColNo,
                 endLineNo, endColNo);
+
         final Comment comment = new Comment(cComment, startColNo, endLineNo,
                 endColNo);
 
@@ -227,20 +231,25 @@ public final class FileContents implements CommentListener {
     private String[] extractBlockComment(int startLineNo, int startColNo,
             int endLineNo, int endColNo) {
         final String[] returnValue;
+
         if (startLineNo == endLineNo) {
             returnValue = new String[1];
+
             returnValue[0] = line(startLineNo - 1).substring(startColNo,
                     endColNo + 1);
         }
         else {
             returnValue = new String[endLineNo - startLineNo + 1];
             returnValue[0] = line(startLineNo - 1).substring(startColNo);
+
             for (int i = startLineNo; i < endLineNo; i++) {
                 returnValue[i - startLineNo + 1] = line(i);
             }
+
             returnValue[returnValue.length - 1] = line(endLineNo - 1).substring(0,
                     endColNo + 1);
         }
+
         return returnValue;
     }
 
@@ -360,6 +369,7 @@ public final class FileContents implements CommentListener {
     private boolean hasIntersectionWithBlockComment(int startLineNo, int startColNo,
             int endLineNo, int endColNo) {
         boolean hasIntersection = false;
+
         // Check C comments (all comments should be checked)
         final Collection<List<TextBlock>> values = clangComments.values();
         for (final List<TextBlock> row : values) {
@@ -369,10 +379,12 @@ public final class FileContents implements CommentListener {
                     break;
                 }
             }
+
             if (hasIntersection) {
                 break;
             }
         }
+
         return hasIntersection;
     }
 
@@ -387,16 +399,19 @@ public final class FileContents implements CommentListener {
     private boolean hasIntersectionWithSingleLineComment(int startLineNo, int startColNo,
             int endLineNo, int endColNo) {
         boolean hasIntersection = false;
+
         // Check CPP comments (line searching is possible)
         for (int lineNumber = startLineNo; lineNumber <= endLineNo;
              lineNumber++) {
             final TextBlock comment = cppComments.get(lineNumber);
+
             if (comment != null && comment.intersects(startLineNo, startColNo,
                     endLineNo, endColNo)) {
                 hasIntersection = true;
                 break;
             }
         }
+
         return hasIntersection;
     }
 

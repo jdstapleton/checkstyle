@@ -44,6 +44,7 @@ public class XpathRegressionOuterTypeNumberTest extends AbstractXpathTestSupport
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(OuterTypeNumberCheck.class);
+
         moduleConfig.addAttribute("max", "0");
 
         final String[] expectedViolation = {

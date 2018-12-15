@@ -135,6 +135,7 @@ public final class LocalizedMessage
         else {
             this.args = Arrays.copyOf(args, args.length);
         }
+
         this.bundle = bundle;
         this.severityLevel = severityLevel;
         this.moduleId = moduleId;
@@ -294,10 +295,13 @@ public final class LocalizedMessage
         if (this == object) {
             return true;
         }
+
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
+
         final LocalizedMessage localizedMessage = (LocalizedMessage) object;
+
         return Objects.equals(lineNo, localizedMessage.lineNo)
                 && Objects.equals(columnNo, localizedMessage.columnNo)
                 && Objects.equals(columnCharIndex, localizedMessage.columnCharIndex)
@@ -348,6 +352,7 @@ public final class LocalizedMessage
                 message = formatter.format(args);
             }
         }
+
         return message;
     }
 
@@ -358,10 +363,12 @@ public final class LocalizedMessage
      */
     private String getCustomMessage() {
         String message = null;
+
         if (customMessage != null) {
             final MessageFormat formatter = new MessageFormat(customMessage, Locale.ROOT);
             message = formatter.format(args);
         }
+
         return message;
     }
 
@@ -449,6 +456,7 @@ public final class LocalizedMessage
      */
     public static void setLocale(Locale locale) {
         clearCache();
+
         if (Locale.ENGLISH.getLanguage().equals(locale.getLanguage())) {
             sLocale = Locale.ROOT;
         }
@@ -487,6 +495,7 @@ public final class LocalizedMessage
         else {
             result = Integer.compare(lineNo, other.lineNo);
         }
+
         return result;
     }
 
@@ -497,7 +506,6 @@ public final class LocalizedMessage
      * </p>
      */
     public static class Utf8Control extends Control {
-
         @Override
         public ResourceBundle newBundle(String baseName, Locale locale, String format,
                  ClassLoader loader, boolean reload) throws IOException {
@@ -506,6 +514,7 @@ public final class LocalizedMessage
             final String resourceName = toResourceName(bundleName, "properties");
             final URL url = loader.getResource(resourceName);
             ResourceBundle resourceBundle = null;
+
             if (url != null) {
                 final URLConnection connection = url.openConnection();
                 if (connection != null) {
@@ -517,6 +526,7 @@ public final class LocalizedMessage
                     }
                 }
             }
+
             return resourceBundle;
         }
 

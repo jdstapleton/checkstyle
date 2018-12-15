@@ -67,16 +67,20 @@ public final class SuppressionsStringPrinter {
         if (matcher.matches()) {
             final FileText fileText = new FileText(file.getAbsoluteFile(),
                     System.getProperty("file.encoding", StandardCharsets.UTF_8.name()));
+
             final DetailAST detailAST =
                     JavaParser.parseFileText(fileText, JavaParser.Options.WITH_COMMENTS);
+
             final int lineNumber = Integer.parseInt(matcher.group(1));
             final int columnNumber = Integer.parseInt(matcher.group(2));
+
             return generate(fileText, detailAST, lineNumber, columnNumber, tabWidth);
         }
         else {
             final String exceptionMsg = String.format(Locale.ROOT,
                     "%s does not match valid format 'line:column'.",
                     suppressionLineColumnNumber);
+
             throw new IllegalStateException(exceptionMsg);
         }
     }
@@ -95,7 +99,9 @@ public final class SuppressionsStringPrinter {
         final XpathQueryGenerator queryGenerator =
                 new XpathQueryGenerator(detailAST, lineNumber, columnNumber, fileText,
                         tabWidth);
+
         final List<String> suppressions = queryGenerator.generate();
+
         return suppressions.stream().collect(Collectors.joining(LINE_SEPARATOR,
                 "", LINE_SEPARATOR));
     }

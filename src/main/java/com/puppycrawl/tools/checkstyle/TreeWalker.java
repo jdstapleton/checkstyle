@@ -155,6 +155,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
             bean.contextualize(childContext);
             bean.configure(childConf);
         }
+
         if (module instanceof AbstractCheck) {
             final AbstractCheck check = (AbstractCheck) module;
             check.init();
@@ -179,21 +180,26 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
                 && (!ordinaryChecks.isEmpty() || !commentChecks.isEmpty())) {
             final FileContents contents = new FileContents(fileText);
             final DetailAST rootAST = JavaParser.parse(contents);
+
             if (!ordinaryChecks.isEmpty()) {
                 walk(rootAST, contents, AstState.ORDINARY);
             }
+
             if (!commentChecks.isEmpty()) {
                 final DetailAST astWithComments = JavaParser.appendHiddenCommentNodes(rootAST);
                 walk(astWithComments, contents, AstState.WITH_COMMENTS);
             }
+
             if (filters.isEmpty()) {
                 addMessages(messages);
             }
             else {
                 final SortedSet<LocalizedMessage> filteredMessages =
                     getFilteredMessages(file.getAbsolutePath(), contents, rootAST);
+
                 addMessages(filteredMessages);
             }
+
             messages.clear();
         }
     }
@@ -211,6 +217,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         for (LocalizedMessage element : messages) {
             final TreeWalkerAuditEvent event =
                     new TreeWalkerAuditEvent(fileContents, fileName, element, rootAST);
+
             for (TreeWalkerFilter filter : filters) {
                 if (!filter.accept(event)) {
                     result.remove(element);
@@ -218,6 +225,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
                 }
             }
         }
+
         return result;
     }
 
@@ -229,6 +237,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
     private void registerCheck(AbstractCheck check)
             throws CheckstyleException {
         validateDefaultTokens(check);
+
         final int[] tokens;
         final Set<String> checkTokens = check.getTokenNames();
         if (checkTokens.isEmpty()) {
@@ -240,6 +249,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
             //register configured tokens
             final int[] acceptableTokens = check.getAcceptableTokens();
             Arrays.sort(acceptableTokens);
+
             for (String token : checkTokens) {
                 final int tokenId = TokenUtil.getTokenId(token);
                 if (Arrays.binarySearch(acceptableTokens, tokenId) >= 0) {
@@ -249,6 +259,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
                     final String message = String.format(Locale.ROOT, "Token \"%s\" was "
                             + "not found in Acceptable tokens list in check %s",
                             token, check.getClass().getName());
+
                     throw new CheckstyleException(message);
                 }
             }
@@ -256,6 +267,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         for (int element : tokens) {
             registerCheck(element, check);
         }
+
         if (check.isCommentNodesRequired()) {
             commentChecks.add(check);
         }
@@ -288,6 +300,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
             final String message = String.format(Locale.ROOT, "Check '%s' waits for comment type "
                     + "token ('%s') and should override 'isCommentNodesRequired()' "
                     + "method to return 'true'", check.getClass().getName(), token);
+
             throw new CheckstyleException(message);
         }
         else {
@@ -304,11 +317,13 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         if (check.getRequiredTokens().length != 0) {
             final int[] defaultTokens = check.getDefaultTokens();
             Arrays.sort(defaultTokens);
+
             for (final int token : check.getRequiredTokens()) {
                 if (Arrays.binarySearch(defaultTokens, token) < 0) {
                     final String message = String.format(Locale.ROOT, "Token \"%s\" from required "
                             + "tokens was not found in default tokens list in check %s",
                             token, check.getClass().getName());
+
                     throw new CheckstyleException(message);
                 }
             }
@@ -329,6 +344,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         if (ast != null) {
             processIter(ast, astState);
         }
+
         notifyEnd(ast, astState);
     }
 
@@ -431,6 +447,7 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
                 visitors = tokenToOrdinaryChecks.get(tokenType);
             }
         }
+
         return visitors;
     }
 
@@ -445,17 +462,22 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
     public Set<String> getExternalResourceLocations() {
         final Set<String> ordinaryChecksResources =
                 getExternalResourceLocationsOfChecks(ordinaryChecks);
+
         final Set<String> commentChecksResources =
                 getExternalResourceLocationsOfChecks(commentChecks);
+
         final Set<String> filtersResources =
                 getExternalResourceLocationsOfFilters();
+
         final int resultListSize = commentChecksResources.size()
                 + ordinaryChecksResources.size()
                 + filtersResources.size();
+
         final Set<String> resourceLocations = new HashSet<>(resultListSize);
         resourceLocations.addAll(ordinaryChecksResources);
         resourceLocations.addAll(commentChecksResources);
         resourceLocations.addAll(filtersResources);
+
         return resourceLocations;
     }
 
@@ -465,12 +487,14 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
      */
     private Set<String> getExternalResourceLocationsOfFilters() {
         final Set<String> externalConfigurationResources = new HashSet<>();
+
         filters.stream().filter(filter -> filter instanceof ExternalResourceHolder)
                 .forEach(filter -> {
                     final Set<String> checkExternalResources =
                         ((ExternalResourceHolder) filter).getExternalResourceLocations();
                     externalConfigurationResources.addAll(checkExternalResources);
                 });
+
         return externalConfigurationResources;
     }
 
@@ -481,11 +505,13 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
      */
     private static Set<String> getExternalResourceLocationsOfChecks(Set<AbstractCheck> checks) {
         final Set<String> externalConfigurationResources = new HashSet<>();
+
         checks.stream().filter(check -> check instanceof ExternalResourceHolder).forEach(check -> {
             final Set<String> checkExternalResources =
                 ((ExternalResourceHolder) check).getExternalResourceLocations();
             externalConfigurationResources.addAll(checkExternalResources);
         });
+
         return externalConfigurationResources;
     }
 
@@ -500,13 +526,16 @@ public final class TreeWalker extends AbstractFileSetCheck implements ExternalRe
         while (curNode != null) {
             notifyVisit(curNode, astState);
             DetailAST toVisit = curNode.getFirstChild();
+
             while (curNode != null && toVisit == null) {
                 notifyLeave(curNode, astState);
                 toVisit = curNode.getNextSibling();
+
                 if (toVisit == null) {
                     curNode = curNode.getParent();
                 }
             }
+
             curNode = toVisit;
         }
     }

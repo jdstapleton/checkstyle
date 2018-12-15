@@ -96,6 +96,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
         catch (CheckstyleException ex) {
             throw new IllegalStateException(ex);
         }
+
         try {
             CHECKSTYLE_MODULES = CheckUtil.getCheckstyleModules();
         }
@@ -153,6 +154,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
                         || ModuleReflectionUtil.isTreeWalkerFilterModule(moduleClass)) {
                     moduleCreationOption = ModuleCreationOption.IN_TREEWALKER;
                 }
+
                 break;
             }
         }
@@ -192,6 +194,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
         checker.setModuleClassLoader(Thread.currentThread().getContextClassLoader());
         checker.configure(dc);
         checker.addListener(getBriefUtLogger());
+
         return checker;
     }
 
@@ -204,11 +207,13 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
     protected static DefaultConfiguration createTreeWalkerConfig(Configuration config) {
         final DefaultConfiguration dc =
                 new DefaultConfiguration("configuration");
+
         final DefaultConfiguration twConf = createModuleConfig(TreeWalker.class);
         // make sure that the tests always run with this charset
         dc.addAttribute("charset", "iso-8859-1");
         dc.addChild(twConf);
         twConf.addChild(config);
+
         return dc;
     }
 
@@ -220,6 +225,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
     protected static DefaultConfiguration createRootConfig(Configuration config) {
         final DefaultConfiguration dc = new DefaultConfiguration(ROOT_MODULE_NAME);
         dc.addChild(config);
+
         return dc;
     }
 
@@ -280,14 +286,17 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
                 parseInt = parseInt.substring(parseInt.indexOf(':') + 1);
                 parseInt = parseInt.substring(0, parseInt.indexOf(':'));
                 final int lineNumber = Integer.parseInt(parseInt);
+
                 assertTrue("input file is expected to have a warning comment on line number "
                         + lineNumber, previousLineNumber == lineNumber
                             || theWarnings.remove((Integer) lineNumber));
+
                 previousLineNumber = lineNumber;
             }
 
             assertEquals("unexpected output: " + lnr.readLine(),
                     expected.length, errs);
+
             assertEquals("unexpected warnings " + theWarnings, 0, theWarnings.size());
         }
 
@@ -308,8 +317,10 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
             String messageKey, Object... arguments) throws IOException {
         final Properties pr = new Properties();
         pr.load(aClass.getResourceAsStream("messages.properties"));
+
         final MessageFormat formatter = new MessageFormat(pr.getProperty(messageKey),
                 Locale.ROOT);
+
         return formatter.format(arguments);
     }
 
@@ -327,9 +338,11 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
             if (messageKey.equals(entry.getKey())) {
                 final MessageFormat formatter = new MessageFormat(entry.getValue(), Locale.ROOT);
                 checkMessage = formatter.format(arguments);
+
                 break;
             }
         }
+
         return checkMessage;
     }
 
@@ -393,6 +406,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
                 result.add(currentConfig);
             }
         }
+
         return result;
     }
 
@@ -402,6 +416,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
         if (os.startsWith("Windows")) {
             fixedPath = path.substring(path.indexOf(':') + 1);
         }
+
         return fixedPath;
     }
 
@@ -422,12 +437,15 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
                 if (line == null) {
                     break;
                 }
+
                 if (WARN_PATTERN.matcher(line).find()) {
                     result.add(lineNumber);
                 }
+
                 lineNumber++;
             }
         }
+
         return result.toArray(new Integer[0]);
     }
 

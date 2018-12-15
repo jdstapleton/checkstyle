@@ -123,6 +123,7 @@ public class NewlineAtEndOfFileCheck
             throws IOException {
         final boolean result;
         final int len = lineSeparator.length();
+
         if (randomAccessFile.length() < len) {
             result = false;
         }
@@ -134,8 +135,10 @@ public class NewlineAtEndOfFileCheck
                 throw new IOException("Unable to read " + len + " bytes, got "
                         + readBytes);
             }
+
             result = lineSeparator.matches(lastBytes);
         }
+
         return result;
     }
 

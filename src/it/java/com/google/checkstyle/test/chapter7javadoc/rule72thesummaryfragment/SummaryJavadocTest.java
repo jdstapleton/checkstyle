@@ -48,8 +48,10 @@ public class SummaryJavadocTest extends AbstractModuleTestSupport {
     public void testIncorrect() throws Exception {
         final String msgFirstSentence = getCheckMessage(SummaryJavadocCheck.class,
             "summary.first.sentence");
+
         final String msgForbiddenFragment = getCheckMessage(SummaryJavadocCheck.class,
             "summary.javaDoc");
+
         final String msgMissingDoc = getCheckMessage(SummaryJavadocCheck.class,
             "summary.javaDoc.missing");
 

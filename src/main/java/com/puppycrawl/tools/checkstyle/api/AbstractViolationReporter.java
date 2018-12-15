@@ -112,6 +112,7 @@ public abstract class AbstractViolationReporter
      */
     protected String getMessageBundle() {
         final String className = getClass().getName();
+
         return getMessageBundle(className);
     }
 
@@ -125,6 +126,7 @@ public abstract class AbstractViolationReporter
         final String messageBundle;
         final int endIndex = className.lastIndexOf('.');
         final String messages = "messages";
+
         if (endIndex == -1) {
             messageBundle = messages;
         }
@@ -132,6 +134,7 @@ public abstract class AbstractViolationReporter
             final String packageName = className.substring(0, endIndex);
             messageBundle = packageName + "." + messages;
         }
+
         return messageBundle;
     }
 

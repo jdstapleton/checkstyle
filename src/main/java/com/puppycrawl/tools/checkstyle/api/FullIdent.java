@@ -55,6 +55,7 @@ public final class FullIdent {
     public static FullIdent createFullIdent(DetailAST ast) {
         final FullIdent ident = new FullIdent();
         extractFullIdent(ident, ast);
+
         return ident;
     }
 
@@ -116,6 +117,7 @@ public final class FullIdent {
             if (ast.getType() == TokenTypes.DOT) {
                 extractFullIdent(full, ast.getFirstChild());
                 full.append(".");
+
                 extractFullIdent(
                     full, ast.getFirstChild().getNextSibling());
             }
@@ -144,6 +146,7 @@ public final class FullIdent {
      */
     private void append(DetailAST ast) {
         elements.add(ast.getText());
+
         if (detailAst == null) {
             detailAst = ast;
         }

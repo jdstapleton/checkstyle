@@ -67,6 +67,7 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
     @Override
     protected void processFiltered(File file, FileText fileText) {
         final UniqueProperties properties = new UniqueProperties();
+
         try (InputStream inputStream = Files.newInputStream(file.toPath())) {
             properties.load(inputStream);
         }
@@ -99,12 +100,15 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
         final Pattern keyPattern = getKeyPattern(keyName);
         int lineNumber = 1;
         final Matcher matcher = keyPattern.matcher("");
+
         for (int index = 0; index < fileText.size(); index++) {
             final String line = fileText.get(index);
             matcher.reset(line);
+
             if (matcher.matches()) {
                 break;
             }
+
             ++lineNumber;
         }
         // -1 as check seeks for the first duplicate occurrence in file,
@@ -112,6 +116,7 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
         if (lineNumber > fileText.size() - 1) {
             lineNumber = 1;
         }
+
         return lineNumber;
     }
 
@@ -125,6 +130,7 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
     private static Pattern getKeyPattern(String keyName) {
         final String keyPatternString = "^" + SPACE_PATTERN.matcher(keyName)
                 .replaceAll(Matcher.quoteReplacement("\\\\ ")) + "[\\s:=].*$";
+
         return Pattern.compile(keyPatternString);
     }
 
@@ -155,6 +161,7 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
                 duplicatedKeys.computeIfAbsent(keyString, empty -> new AtomicInteger(0))
                         .incrementAndGet();
             }
+
             return oldValue;
         }
 
@@ -166,7 +173,6 @@ public class UniquePropertiesCheck extends AbstractFileSetCheck {
         public Map<String, AtomicInteger> getDuplicatedKeys() {
             return new HashMap<>(duplicatedKeys);
         }
-
     }
 
 }

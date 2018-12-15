@@ -36,6 +36,7 @@ public class MultipleVariableDeclarationsTest extends AbstractModuleTestSupport 
     public void testMultipleVariableDeclarations() throws Exception {
         final String msgComma = getCheckMessage(MultipleVariableDeclarationsCheck.class,
             "multiple.variable.declarations.comma");
+
         final String msg = getCheckMessage(MultipleVariableDeclarationsCheck.class,
             "multiple.variable.declarations");
 

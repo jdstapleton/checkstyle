@@ -319,6 +319,7 @@ public class AvoidEscapedUnicodeCharactersCheck
     private static boolean hasUnicodeChar(String literal) {
         final String literalWithoutEscapedBackslashes =
                 ESCAPED_BACKSLASH.matcher(literal).replaceAll("");
+
         return UNICODE_REGEXP.matcher(literalWithoutEscapedBackslashes).find();
     }
 
@@ -331,8 +332,10 @@ public class AvoidEscapedUnicodeCharactersCheck
     private static boolean isOnlyUnicodeValidChars(String literal, Pattern pattern) {
         final int unicodeMatchesCounter =
                 countMatches(UNICODE_REGEXP, literal);
+
         final int unicodeValidMatchesCounter =
                 countMatches(pattern, literal);
+
         return unicodeMatchesCounter - unicodeValidMatchesCounter == 0;
     }
 
@@ -343,6 +346,7 @@ public class AvoidEscapedUnicodeCharactersCheck
      */
     private boolean hasTrailComment(DetailAST ast) {
         boolean result = false;
+
         final int lineNo = ast.getLineNo();
         if (singlelineComments.containsKey(lineNo)) {
             result = true;
@@ -355,6 +359,7 @@ public class AvoidEscapedUnicodeCharactersCheck
                 result = isTrailingBlockComment(comment, line);
             }
         }
+
         return result;
     }
 
@@ -377,10 +382,12 @@ public class AvoidEscapedUnicodeCharactersCheck
      */
     private static int countMatches(Pattern pattern, String target) {
         int matcherCounter = 0;
+
         final Matcher matcher = pattern.matcher(target);
         while (matcher.find()) {
             matcherCounter++;
         }
+
         return matcherCounter;
     }
 

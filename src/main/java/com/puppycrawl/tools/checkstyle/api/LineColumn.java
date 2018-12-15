@@ -68,6 +68,7 @@ public class LineColumn implements Comparable<LineColumn> {
         else {
             result = Integer.compare(line, lineColumn.line);
         }
+
         return result;
     }
 
@@ -76,10 +77,13 @@ public class LineColumn implements Comparable<LineColumn> {
         if (this == other) {
             return true;
         }
+
         if (other == null || getClass() != other.getClass()) {
             return false;
         }
+
         final LineColumn lineColumn = (LineColumn) other;
+
         return Objects.equals(line, lineColumn.line)
                 && Objects.equals(column, lineColumn.column);
     }

@@ -88,6 +88,7 @@ public class XpathRegressionMethodParamPadTest extends AbstractXpathTestSupport 
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(MethodParamPadCheck.class);
+
         moduleConfig.addAttribute("option", "space");
 
         final String[] expectedViolation = {

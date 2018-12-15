@@ -140,12 +140,14 @@ public class EmptyBlockCheck
         if (leftCurly != null) {
             if (option == BlockOption.STATEMENT) {
                 final boolean emptyBlock;
+
                 if (leftCurly.getType() == TokenTypes.LCURLY) {
                     emptyBlock = leftCurly.getNextSibling().getType() != TokenTypes.CASE_GROUP;
                 }
                 else {
                     emptyBlock = leftCurly.getChildCount() <= 1;
                 }
+
                 if (emptyBlock) {
                     log(leftCurly,
                         MSG_KEY_BLOCK_NO_STATEMENT,
@@ -175,16 +177,19 @@ public class EmptyBlockCheck
         else {
             rcurlyAST = rightCurly;
         }
+
         final int slistLineNo = slistAST.getLineNo();
         final int slistColNo = slistAST.getColumnNo();
         final int rcurlyLineNo = rcurlyAST.getLineNo();
         final int rcurlyColNo = rcurlyAST.getColumnNo();
         final String[] lines = getLines();
         boolean returnValue = false;
+
         if (slistLineNo == rcurlyLineNo) {
             // Handle braces on the same line
             final String txt = lines[slistLineNo - 1]
                     .substring(slistColNo + 1, rcurlyColNo);
+
             if (!CommonUtil.isBlank(txt)) {
                 returnValue = true;
             }
@@ -192,10 +197,12 @@ public class EmptyBlockCheck
         else {
             final String firstLine = lines[slistLineNo - 1].substring(slistColNo + 1);
             final String lastLine = lines[rcurlyLineNo - 1].substring(0, rcurlyColNo);
+
             // check if all lines are also only whitespace
             returnValue = !(CommonUtil.isBlank(firstLine) && CommonUtil.isBlank(lastLine))
                     || !checkIsAllLinesAreWhitespace(lines, slistLineNo, rcurlyLineNo);
         }
+
         return returnValue;
     }
 
@@ -212,12 +219,14 @@ public class EmptyBlockCheck
      */
     private static boolean checkIsAllLinesAreWhitespace(String[] lines, int lineFrom, int lineTo) {
         boolean result = true;
+
         for (int i = lineFrom; i < lineTo - 1; i++) {
             if (!CommonUtil.isBlank(lines[i])) {
                 result = false;
                 break;
             }
         }
+
         return result;
     }
 
@@ -230,6 +239,7 @@ public class EmptyBlockCheck
     private static DetailAST findLeftCurly(DetailAST ast) {
         final DetailAST leftCurly;
         final DetailAST slistAST = ast.findFirstToken(TokenTypes.SLIST);
+
         if ((ast.getType() == TokenTypes.LITERAL_CASE
                 || ast.getType() == TokenTypes.LITERAL_DEFAULT)
                 && ast.getNextSibling() != null
@@ -243,6 +253,7 @@ public class EmptyBlockCheck
         else {
             leftCurly = slistAST;
         }
+
         return leftCurly;
     }
 

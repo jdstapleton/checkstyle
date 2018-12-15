@@ -83,6 +83,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
         clearBranchTokenTypes();
         clearChildCountCache(this);
         super.setFirstChild(ast);
+
         if (ast != null) {
             ((DetailAST) ast).setParent(this);
         }
@@ -93,9 +94,11 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
         super.setNextSibling(ast);
+
         if (ast != null && parent != null) {
             ((DetailAST) ast).setParent(parent);
         }
+
         if (ast != null) {
             ((DetailAST) ast).previousSibling = this;
         }
@@ -109,6 +112,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
     public void addPreviousSibling(DetailAST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
+
         if (ast != null) {
             //parent is set in setNextSibling or parent.setFirstChild
             final DetailAST previousSiblingNode = previousSibling;
@@ -134,6 +138,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
     public void addNextSibling(DetailAST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(parent);
+
         if (ast != null) {
             //parent is set in setNextSibling
             final DetailAST nextSibling = getNextSibling();
@@ -152,10 +157,12 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
     public void addChild(AST ast) {
         clearBranchTokenTypes();
         clearChildCountCache(this);
+
         if (ast != null) {
             ((DetailAST) ast).setParent(this);
             ((DetailAST) ast).previousSibling = getLastChild();
         }
+
         super.addChild(ast);
     }
 
@@ -175,6 +182,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 child = child.getNextSibling();
             }
         }
+
         return childCount;
     }
 
@@ -190,6 +198,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 count++;
             }
         }
+
         return count;
     }
 
@@ -199,10 +208,12 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
      */
     private void setParent(DetailAST parent) {
         DetailAST instance = this;
+
         do {
             instance.clearBranchTokenTypes();
             instance.parent = parent;
             final DetailAST nextSibling = instance.getNextSibling();
+
             if (nextSibling != null) {
                 nextSibling.previousSibling = instance;
             }
@@ -235,9 +246,11 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 resultNo = findLineNo(getNextSibling());
             }
         }
+
         if (resultNo == -1) {
             resultNo = lineNo;
         }
+
         return resultNo;
     }
 
@@ -266,9 +279,11 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 resultNo = findColumnNo(getNextSibling());
             }
         }
+
         if (resultNo == -1) {
             resultNo = columnNo;
         }
+
         return resultNo;
     }
 
@@ -290,6 +305,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
         while (ast != null && ast.getNextSibling() != null) {
             ast = ast.getNextSibling();
         }
+
         return ast;
     }
 
@@ -312,6 +328,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 break;
             }
         }
+
         return resultNo;
     }
 
@@ -334,6 +351,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 break;
             }
         }
+
         return resultNo;
     }
 
@@ -356,6 +374,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 child = child.getNextSibling();
             }
         }
+
         return branchTokenTypes;
     }
 
@@ -391,6 +410,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
                 break;
             }
         }
+
         return returnValue;
     }
 

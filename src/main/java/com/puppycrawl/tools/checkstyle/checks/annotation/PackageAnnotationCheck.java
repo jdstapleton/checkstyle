@@ -74,6 +74,7 @@ public class PackageAnnotationCheck extends AbstractCheck {
     public void visitToken(final DetailAST ast) {
         final boolean containsAnnotation =
             AnnotationUtil.containsAnnotation(ast);
+
         final boolean inPackageInfo =
             getFileContents().inPackageInfo();
 

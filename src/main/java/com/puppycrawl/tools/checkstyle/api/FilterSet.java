@@ -69,10 +69,13 @@ public class FilterSet
         if (this == other) {
             return true;
         }
+
         if (other == null || getClass() != other.getClass()) {
             return false;
         }
+
         final FilterSet filterSet = (FilterSet) other;
+
         return Objects.equals(filters, filterSet.filters);
     }
 
@@ -90,6 +93,7 @@ public class FilterSet
                 break;
             }
         }
+
         return result;
     }
 

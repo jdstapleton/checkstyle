@@ -72,6 +72,7 @@ public final class BeforeExecutionFileFilterSet
                 break;
             }
         }
+        
         return result;
     }
 

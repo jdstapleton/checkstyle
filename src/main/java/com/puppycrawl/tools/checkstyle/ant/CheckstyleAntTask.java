@@ -218,6 +218,7 @@ public class CheckstyleAntTask extends Task {
         if (classpath == null) {
             classpath = new Path(getProject());
         }
+
         return classpath.createPath();
     }
 
@@ -237,6 +238,7 @@ public class CheckstyleAntTask extends Task {
         if (config != null) {
             throw new BuildException("Attribute 'config' has already been set");
         }
+
         config = configuration;
     }
 
@@ -282,13 +284,16 @@ public class CheckstyleAntTask extends Task {
                         "Must specify at least one of 'file' or nested 'fileset' or 'path'.",
                         getLocation());
             }
+
             if (config == null) {
                 throw new BuildException("Must specify 'config'.", getLocation());
             }
+
             realExecute(version);
         }
         finally {
             final long endTime = System.currentTimeMillis();
+
             log("Total execution took " + (endTime - startTime) + TIME_SUFFIX,
                 Project.MSG_VERBOSE);
         }
@@ -309,8 +314,10 @@ public class CheckstyleAntTask extends Task {
             for (AuditListener element : listeners) {
                 rootModule.addListener(element);
             }
+
             final SeverityLevelCounter warningCounter =
                 new SeverityLevelCounter(SeverityLevel.WARNING);
+
             rootModule.addListener(warningCounter);
 
             processFiles(rootModule, warningCounter, checkstyleVersion);
@@ -333,6 +340,7 @@ public class CheckstyleAntTask extends Task {
         final long startTime = System.currentTimeMillis();
         final List<File> files = getFilesToCheck();
         final long endTime = System.currentTimeMillis();
+
         log("To locate the files took " + (endTime - startTime) + TIME_SUFFIX,
             Project.MSG_VERBOSE);
 
@@ -340,6 +348,7 @@ public class CheckstyleAntTask extends Task {
                 + Objects.toString(checkstyleVersion, "")
                 + " on " + files.size()
                 + " files", Project.MSG_INFO);
+
         log("Using configuration " + config, Project.MSG_VERBOSE);
 
         final int numErrs;
@@ -348,12 +357,14 @@ public class CheckstyleAntTask extends Task {
             final long processingStartTime = System.currentTimeMillis();
             numErrs = rootModule.process(files);
             final long processingEndTime = System.currentTimeMillis();
+
             log("To process the files took " + (processingEndTime - processingStartTime)
                 + TIME_SUFFIX, Project.MSG_VERBOSE);
         }
         catch (CheckstyleException ex) {
             throw new BuildException("Unable to process files: " + files, ex);
         }
+
         final int numWarnings = warningCounter.getCount();
         final boolean okStatus = numErrs <= maxErrors && numWarnings <= maxWarnings;
 
@@ -362,6 +373,7 @@ public class CheckstyleAntTask extends Task {
             final String failureMsg =
                     "Got " + numErrs + " errors and " + numWarnings
                             + " warnings.";
+
             if (failureProperty != null) {
                 getProject().setProperty(failureProperty, failureMsg);
             }
@@ -380,8 +392,10 @@ public class CheckstyleAntTask extends Task {
         final RootModule rootModule;
         try {
             final Properties props = createOverridingProperties();
+
             final ThreadModeSettings threadModeSettings =
                     ThreadModeSettings.SINGLE_THREAD_MODE_INSTANCE;
+
             final ConfigurationLoader.IgnoredModulesOptions ignoredModulesOptions;
             if (executeIgnoredModules) {
                 ignoredModulesOptions = ConfigurationLoader.IgnoredModulesOptions.EXECUTE;
@@ -415,6 +429,7 @@ public class CheckstyleAntTask extends Task {
             throw new BuildException(String.format(Locale.ROOT, "Unable to create Root Module: "
                     + "config {%s}, classpath {%s}.", config, classpath), ex);
         }
+
         return rootModule;
     }
 
@@ -467,6 +482,7 @@ public class CheckstyleAntTask extends Task {
             if (formatters.isEmpty()) {
                 final OutputStream debug = new LogOutputStream(this, Project.MSG_DEBUG);
                 final OutputStream err = new LogOutputStream(this, Project.MSG_ERR);
+
                 listeners[0] = new DefaultLogger(debug, AutomaticBean.OutputStreamOptions.CLOSE,
                         err, AutomaticBean.OutputStreamOptions.CLOSE);
             }
@@ -481,6 +497,7 @@ public class CheckstyleAntTask extends Task {
             throw new BuildException(String.format(Locale.ROOT, "Unable to create listeners: "
                     + "formatters {%s}.", formatters), ex);
         }
+
         return listeners;
     }
 
@@ -585,6 +602,7 @@ public class CheckstyleAntTask extends Task {
      */
     private List<File> retrieveAllScannedFiles(DirectoryScanner scanner, int logIndex) {
         final String[] fileNames = scanner.getIncludedFiles();
+
         log(String.format(Locale.ROOT, "%d) Adding %d files from directory %s",
             logIndex, fileNames.length, scanner.getBasedir()), Project.MSG_VERBOSE);
 
@@ -660,6 +678,7 @@ public class CheckstyleAntTask extends Task {
             else {
                 listener = createDefaultLogger(task);
             }
+
             return listener;
         }
 
@@ -682,10 +701,12 @@ public class CheckstyleAntTask extends Task {
             }
             else {
                 final OutputStream infoStream = Files.newOutputStream(toFile.toPath());
+
                 defaultLogger =
                         new DefaultLogger(infoStream, AutomaticBean.OutputStreamOptions.CLOSE,
                                 infoStream, AutomaticBean.OutputStreamOptions.NONE);
             }
+
             return defaultLogger;
         }
 
@@ -705,6 +726,7 @@ public class CheckstyleAntTask extends Task {
                 xmlLogger = new XMLLogger(Files.newOutputStream(toFile.toPath()),
                         AutomaticBean.OutputStreamOptions.CLOSE);
             }
+
             return xmlLogger;
         }
 

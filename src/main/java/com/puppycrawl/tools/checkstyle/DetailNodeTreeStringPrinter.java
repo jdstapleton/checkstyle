@@ -64,9 +64,11 @@ public final class DetailNodeTreeStringPrinter {
     public static DetailNode parseJavadocAsDetailNode(DetailAST blockComment) {
         final JavadocDetailNodeParser parser = new JavadocDetailNodeParser();
         final ParseStatus status = parser.parseJavadocAsDetailNode(blockComment);
+
         if (status.getParseErrorMessage() != null) {
             throw new IllegalArgumentException(getParseErrorMessage(status.getParseErrorMessage()));
         }
+
         return status.getTree();
     }
 
@@ -77,6 +79,7 @@ public final class DetailNodeTreeStringPrinter {
      */
     private static DetailNode parseJavadocAsDetailNode(String javadocComment) {
         final DetailAST blockComment = CommonUtil.createBlockCommentNode(javadocComment);
+
         return parseJavadocAsDetailNode(blockComment);
     }
 
@@ -94,6 +97,7 @@ public final class DetailNodeTreeStringPrinter {
                 "",
                 DetailNodeTreeStringPrinter.class,
                 null);
+
         return "[ERROR:" + parseErrorMessage.getLineNumber() + "] " + lmessage.getMessage();
     }
 
@@ -114,14 +118,17 @@ public final class DetailNodeTreeStringPrinter {
             else {
                 messageBuilder.append(prefix);
             }
+
             messageBuilder.append(getIndentation(node))
                     .append(JavadocUtil.getTokenName(node.getType())).append(" -> ")
                     .append(JavadocUtil.escapeAllControlChars(node.getText())).append(" [")
                     .append(node.getLineNumber()).append(':').append(node.getColumnNumber())
                     .append(']').append(LINE_SEPARATOR)
                     .append(printTree(JavadocUtil.getFirstChild(node), rootPrefix, prefix));
+
             node = JavadocUtil.getNextSibling(node);
         }
+
         return messageBuilder.toString();
     }
 
@@ -136,6 +143,7 @@ public final class DetailNodeTreeStringPrinter {
         final StringBuilder indentation = new StringBuilder(1024);
         while (currentNode.getParent() != null) {
             currentNode = currentNode.getParent();
+
             if (currentNode.getParent() == null) {
                 if (isLastChild) {
                     // only ASCII symbols must be used due to
@@ -155,6 +163,7 @@ public final class DetailNodeTreeStringPrinter {
                 }
             }
         }
+
         return indentation.toString();
     }
 
@@ -167,6 +176,7 @@ public final class DetailNodeTreeStringPrinter {
     private static DetailNode parseFile(File file) throws IOException {
         final FileText text = new FileText(file.getAbsoluteFile(),
             System.getProperty("file.encoding", StandardCharsets.UTF_8.name()));
+
         return parseJavadocAsDetailNode(text.getFullText().toString());
     }
 

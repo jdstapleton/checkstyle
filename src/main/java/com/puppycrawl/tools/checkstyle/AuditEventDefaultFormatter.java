@@ -61,10 +61,13 @@ public class AuditEventDefaultFormatter implements AuditEventFormatter {
 
         sb.append('[').append(severityLevelName).append("] ")
             .append(fileName).append(':').append(event.getLine());
+
         if (event.getColumn() > 0) {
             sb.append(':').append(event.getColumn());
         }
+
         sb.append(": ").append(message).append(" [");
+
         if (event.getModuleId() == null) {
             final String checkShortName = getCheckShortName(event);
             sb.append(checkShortName);
@@ -72,6 +75,7 @@ public class AuditEventDefaultFormatter implements AuditEventFormatter {
         else {
             sb.append(event.getModuleId());
         }
+
         sb.append(']');
 
         return sb.toString();
@@ -117,6 +121,7 @@ public class AuditEventDefaultFormatter implements AuditEventFormatter {
                 checkShortName = checkFullName.substring(lastDotIndex + 1);
             }
         }
+
         return checkShortName;
     }
 

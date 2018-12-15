@@ -92,6 +92,7 @@ public class CommentsIndentationTest extends AbstractModuleTestSupport {
             };
 
         final Configuration checkConfig = getModuleConfig("CommentsIndentation");
+
         final String filePath =
             getPath("InputCommentsIndentationCommentIsAtTheEndOfBlock.java");
 
@@ -139,6 +140,7 @@ public class CommentsIndentationTest extends AbstractModuleTestSupport {
             };
 
         final Configuration checkConfig = getModuleConfig("CommentsIndentation");
+
         final String filePath =
             getPath("InputCommentsIndentationInSwitchBlock.java");
 
@@ -162,6 +164,7 @@ public class CommentsIndentationTest extends AbstractModuleTestSupport {
             };
 
         final Configuration checkConfig = getModuleConfig("CommentsIndentation");
+
         final String filePath =
             getPath("InputCommentsIndentationInEmptyBlock.java");
 
@@ -193,6 +196,7 @@ public class CommentsIndentationTest extends AbstractModuleTestSupport {
             };
 
         final Configuration checkConfig = getModuleConfig("CommentsIndentation");
+
         final String filePath =
             getPath("InputCommentsIndentationSurroundingCode.java");
 

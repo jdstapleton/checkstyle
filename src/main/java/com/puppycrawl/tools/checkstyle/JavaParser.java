@@ -88,6 +88,7 @@ public final class JavaParser {
         final GeneratedJavaRecognizer parser = new GeneratedJavaRecognizer(filter);
         parser.setFilename(contents.getFileName());
         parser.setASTNodeClass(DetailAST.class.getName());
+
         try {
             parser.compilationUnit();
         }
@@ -95,6 +96,7 @@ public final class JavaParser {
             final String exceptionMsg = String.format(Locale.ROOT,
                 "%s occurred while parsing file %s.",
                 ex.getClass().getSimpleName(), contents.getFileName());
+
             throw new CheckstyleException(exceptionMsg, ex);
         }
 
@@ -115,6 +117,7 @@ public final class JavaParser {
         if (options == Options.WITH_COMMENTS) {
             ast = appendHiddenCommentNodes(ast);
         }
+
         return ast;
     }
 
@@ -130,6 +133,7 @@ public final class JavaParser {
             throws IOException, CheckstyleException {
         final FileText text = new FileText(file.getAbsoluteFile(),
             System.getProperty("file.encoding", StandardCharsets.UTF_8.name()));
+
         return parseFileText(text, options);
     }
 
@@ -169,12 +173,15 @@ public final class JavaParser {
             DetailAST toVisit = curNode.getFirstChild();
             while (curNode != null && toVisit == null) {
                 toVisit = curNode.getNextSibling();
+
                 if (toVisit == null) {
                     curNode = curNode.getParent();
                 }
             }
+
             curNode = toVisit;
         }
+
         if (lastNode != null) {
             CommonHiddenStreamToken tokenAfter = lastNode.getHiddenAfter();
             DetailAST currentSibling = lastNode;
@@ -188,6 +195,7 @@ public final class JavaParser {
                 tokenAfter = tokenAfter.getHiddenAfter();
             }
         }
+
         return result;
     }
 
@@ -200,9 +208,11 @@ public final class JavaParser {
      */
     private static boolean isPositionGreater(DetailAST ast1, DetailAST ast2) {
         boolean isGreater = ast1.getLineNo() > ast2.getLineNo();
+
         if (!isGreater && ast1.getLineNo() == ast2.getLineNo()) {
             isGreater = ast1.getColumnNo() > ast2.getColumnNo();
         }
+
         return isGreater;
     }
 
@@ -220,6 +230,7 @@ public final class JavaParser {
         else {
             commentAst = CommonUtil.createBlockCommentNode(token);
         }
+
         return commentAst;
     }
 
@@ -247,6 +258,7 @@ public final class JavaParser {
         slCommentContent.setText(token.getText());
 
         slComment.addChild(slCommentContent);
+
         return slComment;
     }
 

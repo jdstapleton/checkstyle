@@ -170,6 +170,7 @@ public class UncommentedMainCheck
      */
     private static boolean checkName(DetailAST method) {
         final DetailAST ident = method.findFirstToken(TokenTypes.IDENT);
+
         return "main".equals(ident.getText());
     }
 
@@ -194,6 +195,7 @@ public class UncommentedMainCheck
     private static boolean checkType(DetailAST method) {
         final DetailAST type =
             method.findFirstToken(TokenTypes.TYPE).getFirstChild();
+
         return type.getType() == TokenTypes.LITERAL_VOID;
     }
 
@@ -208,8 +210,10 @@ public class UncommentedMainCheck
 
         if (params.getChildCount() == 1) {
             final DetailAST parameterType = params.getFirstChild().findFirstToken(TokenTypes.TYPE);
+
             final Optional<DetailAST> arrayDecl = Optional.ofNullable(
                 parameterType.findFirstToken(TokenTypes.ARRAY_DECLARATOR));
+
             final Optional<DetailAST> varargs = Optional.ofNullable(
                 params.getFirstChild().findFirstToken(TokenTypes.ELLIPSIS));
 
@@ -220,6 +224,7 @@ public class UncommentedMainCheck
                 checkPassed = isStringType(parameterType.getFirstChild());
             }
         }
+
         return checkPassed;
     }
 
@@ -230,6 +235,7 @@ public class UncommentedMainCheck
      */
     private static boolean isStringType(DetailAST typeAst) {
         final FullIdent type = FullIdent.createFullIdent(typeAst);
+
         return "String".equals(type.getText())
             || "java.lang.String".equals(type.getText());
     }

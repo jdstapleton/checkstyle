@@ -254,6 +254,7 @@ public class DescendantTokenCheck extends AbstractCheck {
                 if (minimumMessage == null) {
                     minimumMessage = MSG_KEY_MIN;
                 }
+
                 log(ast,
                         minimumMessage,
                         String.valueOf(tokenCount),
@@ -267,6 +268,7 @@ public class DescendantTokenCheck extends AbstractCheck {
                 if (maximumMessage == null) {
                     maximumMessage = MSG_KEY_MAX;
                 }
+
                 log(ast,
                         maximumMessage,
                         String.valueOf(tokenCount),
@@ -286,13 +288,16 @@ public class DescendantTokenCheck extends AbstractCheck {
         final String name = TokenUtil.getTokenName(ast.getType());
 
         int total = 0;
+
         for (int element : limitedTokens) {
             total += counts[element - 1];
         }
+
         if (total < minimumNumber) {
             if (minimumMessage == null) {
                 minimumMessage = MSG_KEY_SUM_MIN;
             }
+
             log(ast,
                     minimumMessage,
                     String.valueOf(total),
@@ -302,6 +307,7 @@ public class DescendantTokenCheck extends AbstractCheck {
             if (maximumMessage == null) {
                 maximumMessage = MSG_KEY_SUM_MAX;
             }
+
             log(ast,
                     maximumMessage,
                     String.valueOf(total),
@@ -323,8 +329,10 @@ public class DescendantTokenCheck extends AbstractCheck {
                     counts[type - 1]++;
                 }
             }
+
             AST child = ast.getFirstChild();
             final int nextDepth = depth + 1;
+
             while (child != null) {
                 countTokens(child, nextDepth);
                 child = child.getNextSibling();
@@ -342,6 +350,7 @@ public class DescendantTokenCheck extends AbstractCheck {
             result[index] = TokenUtil.getTokenId(name);
             index++;
         }
+
         return result;
     }
 
@@ -359,6 +368,7 @@ public class DescendantTokenCheck extends AbstractCheck {
                 maxToken = limitedTokens[i];
             }
         }
+
         counts = new int[maxToken];
     }
 

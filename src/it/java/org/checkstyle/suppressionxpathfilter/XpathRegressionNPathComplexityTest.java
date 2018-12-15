@@ -46,6 +46,7 @@ public class XpathRegressionNPathComplexityTest extends AbstractXpathTestSupport
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(NPathComplexityCheck.class);
+
         moduleConfig.addAttribute("max", "0");
 
         final String[] expectedViolation = {
@@ -73,6 +74,7 @@ public class XpathRegressionNPathComplexityTest extends AbstractXpathTestSupport
 
         final DefaultConfiguration moduleConfig =
                 createModuleConfig(NPathComplexityCheck.class);
+
         moduleConfig.addAttribute("max", "0");
 
         final String[] expectedViolation = {

@@ -88,9 +88,11 @@ public class NonEmptyAtclauseDescriptionTest extends AbstractModuleTestSupport {
      */
     private static Integer[] getLineNumbersFromExpected(String... expected) {
         final Integer[] result = new Integer[expected.length];
+
         for (int i = 0; i < expected.length; i++) {
             result[i] = Integer.valueOf(expected[i].substring(0, expected[i].indexOf(':')));
         }
+
         return result;
     }
 

@@ -96,9 +96,11 @@ public class XMLLogger
      */
     public XMLLogger(OutputStream outputStream, OutputStreamOptions outputStreamOptions) {
         writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
         if (outputStreamOptions == null) {
             throw new IllegalArgumentException("Parameter outputStreamOptions can not be null");
         }
+
         closeStream = outputStreamOptions == OutputStreamOptions.CLOSE;
     }
 
@@ -119,6 +121,7 @@ public class XMLLogger
     @Override
     public void auditFinished(AuditEvent event) {
         writer.println("</checkstyle>");
+
         if (closeStream) {
             writer.close();
         }
@@ -151,6 +154,7 @@ public class XMLLogger
      */
     private void writeFileMessages(String fileName, FileMessages messages) {
         writeFileOpeningTag(fileName);
+
         if (messages != null) {
             for (AuditEvent errorEvent : messages.getErrors()) {
                 writeFileError(errorEvent);
@@ -159,6 +163,7 @@ public class XMLLogger
                 writeException(exception);
             }
         }
+
         writeFileClosingTag();
     }
 
@@ -199,22 +204,28 @@ public class XMLLogger
      */
     private void writeFileError(AuditEvent event) {
         writer.print("<error" + " line=\"" + event.getLine() + "\"");
+
         if (event.getColumn() > 0) {
             writer.print(" column=\"" + event.getColumn() + "\"");
         }
+
         writer.print(" severity=\""
                 + event.getSeverityLevel().getName()
                 + "\"");
+
         writer.print(" message=\""
                 + encode(event.getMessage())
                 + "\"");
+
         writer.print(" source=\"");
+
         if (event.getModuleId() == null) {
             writer.print(encode(event.getSourceName()));
         }
         else {
             writer.print(encode(event.getModuleId()));
         }
+
         writer.println("\"/>");
     }
 
@@ -290,9 +301,11 @@ public class XMLLogger
                     else {
                         sb.append(chr);
                     }
+
                     break;
             }
         }
+
         return sb.toString();
     }
 
@@ -312,13 +325,16 @@ public class XMLLogger
             int prefixLength = 2;
 
             int radix = BASE_10;
+
             if (ent.charAt(2) == 'x') {
                 prefixLength++;
                 radix = BASE_16;
             }
+
             try {
                 Integer.parseInt(
                     ent.substring(prefixLength, ent.length() - 1), radix);
+
                 reference = true;
             }
             catch (final NumberFormatException ignored) {
@@ -327,6 +343,7 @@ public class XMLLogger
         }
         else {
             final String name = ent.substring(1, ent.length() - 1);
+
             for (String element : ENTITIES) {
                 if (name.equals(element)) {
                     reference = true;
@@ -334,6 +351,7 @@ public class XMLLogger
                 }
             }
         }
+
         return reference;
     }
 

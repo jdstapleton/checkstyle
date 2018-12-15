@@ -124,10 +124,12 @@ public class JavadocDetailNodeParser {
             final ParseTree javadocParseTree = javadocParser.javadoc();
 
             final DetailNode tree = convertParseTreeToDetailNode(javadocParseTree);
+
             // adjust first line to indent of /**
             adjustFirstLineToJavadocIndent(tree,
                         javadocCommentAst.getColumnNo()
                                 + JAVADOC_START.length());
+
             result.setTree(tree);
             result.firstNonTightHtmlTag = getFirstNonTightHtmlTag(javadocParser);
         }
@@ -139,6 +141,7 @@ public class JavadocDetailNodeParser {
                 final RecognitionException recognitionEx = (RecognitionException) ex.getCause();
                 if (recognitionEx.getCtx() instanceof JavadocParser.HtmlTagContext) {
                     final Token htmlTagNameStart = getMissedHtmlTag(recognitionEx);
+
                     parseErrorMessage = new ParseErrorMessage(
                             errorListener.offset + htmlTagNameStart.getLine(),
                             MSG_JAVADOC_MISSED_HTML_CLOSE,
@@ -237,6 +240,7 @@ public class JavadocDetailNodeParser {
                         tempParseTreeParent = tempParseTreeParent.getParent();
                     }
                 }
+
                 currentJavadocParent = nextJavadocSibling;
                 parseTreeParent = nextParseTreeSibling;
             }
@@ -254,8 +258,10 @@ public class JavadocDetailNodeParser {
         for (int i = 0; i < nodes.length; i++) {
             final JavadocNodeImpl currentJavadocNode = nodes[i];
             final ParseTree currentParseTreeNodeChild = parseTreeParent.getChild(i);
+
             final JavadocNodeImpl[] subChildren =
                     createChildrenNodes(currentJavadocNode, currentParseTreeNodeChild);
+
             currentJavadocNode.setChildren((DetailNode[]) subChildren);
         }
     }
@@ -277,6 +283,7 @@ public class JavadocDetailNodeParser {
 
             children[j] = child;
         }
+
         return children;
     }
 
@@ -294,9 +301,12 @@ public class JavadocDetailNodeParser {
         for (int i = 0; i < childCount; i++) {
             final JavadocNodeImpl child = createJavadocNode(parseTreeNode.getChild(i),
                     rootJavadocNode, i);
+
             children[i] = child;
         }
+
         rootJavadocNode.setChildren(children);
+
         return rootJavadocNode;
     }
 
@@ -310,6 +320,7 @@ public class JavadocDetailNodeParser {
      */
     private JavadocNodeImpl createJavadocNode(ParseTree parseTree, DetailNode parent, int index) {
         final JavadocNodeImpl node = new JavadocNodeImpl();
+
         if (parseTree.getChildCount() == 0
                 || "Text".equals(getNodeClassNameWithoutContext(parseTree))) {
             node.setText(parseTree.getText());
@@ -317,12 +328,14 @@ public class JavadocDetailNodeParser {
         else {
             node.setText(getFormattedNodeClassNameWithoutContext(parseTree));
         }
+
         node.setColumnNumber(getColumn(parseTree));
         node.setLineNumber(getLine(parseTree) + blockCommentLineNumber);
         node.setIndex(index);
         node.setType(getTokenType(parseTree));
         node.setParent(parent);
         node.setChildren((DetailNode[]) new JavadocNodeImpl[parseTree.getChildCount()]);
+
         return node;
     }
 
@@ -356,6 +369,7 @@ public class JavadocDetailNodeParser {
             final ParserRuleContext rule = (ParserRuleContext) tree;
             line = rule.start.getLine() - 1;
         }
+
         return line;
     }
 
@@ -374,6 +388,7 @@ public class JavadocDetailNodeParser {
             final ParserRuleContext rule = (ParserRuleContext) tree;
             column = rule.start.getCharPositionInLine();
         }
+
         return column;
     }
 
@@ -388,15 +403,18 @@ public class JavadocDetailNodeParser {
         if (node.getParent() != null) {
             final ParseTree parent = node.getParent();
             int index = 0;
+
             while (true) {
                 final ParseTree currentNode = parent.getChild(index);
                 if (currentNode.equals(node)) {
                     nextSibling = parent.getChild(index + 1);
                     break;
                 }
+
                 index++;
             }
         }
+
         return nextSibling;
     }
 
@@ -413,8 +431,10 @@ public class JavadocDetailNodeParser {
         }
         else {
             final String className = getNodeClassNameWithoutContext(node);
+
             final String typeName =
                     CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, className);
+
             tokenType = JavadocUtil.getTokenId(typeName);
         }
 
@@ -430,6 +450,7 @@ public class JavadocDetailNodeParser {
      */
     private static String getFormattedNodeClassNameWithoutContext(ParseTree node) {
         final String classNameWithoutContext = getNodeClassNameWithoutContext(node);
+
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, classNameWithoutContext);
     }
 
@@ -444,6 +465,7 @@ public class JavadocDetailNodeParser {
         final String className = node.getClass().getSimpleName();
         // remove 'Context' at the end
         final int contextLength = 7;
+
         return className.substring(0, className.length() - contextLength);
     }
 
@@ -477,8 +499,10 @@ public class JavadocDetailNodeParser {
     private static Token getMissedHtmlTag(RecognitionException exception) {
         Token htmlTagNameStart = null;
         final Interval sourceInterval = exception.getCtx().getSourceInterval();
+
         final List<Token> tokenList = ((BufferedTokenStream) exception.getInputStream())
                 .getTokens(sourceInterval.a, sourceInterval.b);
+
         final Deque<Token> stack = new ArrayDeque<>();
         int prevTokenType = JavadocTokenTypes.EOF;
         for (final Token token : tokenList) {
@@ -495,11 +519,14 @@ public class JavadocDetailNodeParser {
                     htmlTagNameStart = stack.pop();
                 }
             }
+
             prevTokenType = tokenType;
         }
+
         if (htmlTagNameStart == null) {
             htmlTagNameStart = stack.pop();
         }
+
         return htmlTagNameStart;
     }
 
@@ -522,9 +549,11 @@ public class JavadocDetailNodeParser {
         else {
             final Token token = ((TerminalNode) nonTightTagStartContext.getChild(1))
                     .getSymbol();
+
             offendingToken = new CommonToken(token);
             offendingToken.setLine(offendingToken.getLine() + errorListener.offset);
         }
+
         return offendingToken;
     }
 
@@ -591,6 +620,7 @@ public class JavadocDetailNodeParser {
             else {
                 final int ruleIndex = ex.getCtx().getRuleIndex();
                 final String ruleName = recognizer.getRuleNames()[ruleIndex];
+
                 final String upperCaseRuleName = CaseFormat.UPPER_CAMEL.to(
                         CaseFormat.UPPER_UNDERSCORE, ruleName);
 
@@ -760,6 +790,7 @@ public class JavadocDetailNodeParser {
         @Override
         public Token recoverInline(Parser recognizer) {
             reportError(recognizer, new InputMismatchException(recognizer));
+
             return super.recoverInline(recognizer);
         }
 
